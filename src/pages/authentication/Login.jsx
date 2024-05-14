@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { loginRequest, loginSuccess, loginFailure } from '../../store/actions/login';
 import { fetchMenuItemsRequest, fetchMenuItemsSuccess, fetchMenuItemsFailure } from '../../store/reducers/menuSlice'; // Import actions
 import FormTextField from '../../components/generalcomponents/FormTextField'; // Assuming the path
 import { login } from '../../services/mainApp.service';
 import { Form, Button, message, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getData } from '../../services/mainApp.service';
+import { fetchLocationSuccess } from '../../store/reducers/locationSlice';
 
 const Login = () => {
   const loading = useSelector((state) => state.login.userData);
@@ -15,15 +16,48 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
+  // getting initial data of locations here .....................
+  // Payload for First page open
+  const payload = {
+    "OperationId": 1,
+    "Type": "all",
+    "UserId": 1,
+    "CountryId": null,
+    "ProvinceId": null,
+    "CityId": null,
+    "TownId": null,
+    "AreaId": null,
+    "Country": null,
+    "Province": null,
+    "City": null,
+    "Town": null,
+    "Area": null
+  }
+  // url
+  const url = 'SetupLocationConfig'
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payload);
+        dispatch(fetchLocationSuccess(data.DataSet))
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+      }
+    };
+
+    fetchData();
+  }, [])
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     // Form validation (optional, customize as needed)
     if (!username || !password) {
       message.error('Please enter username and password');
       return;
     }
-
     try {
       dispatch(loginRequest()); // Dispatch login request action
       const { userData, menuItems } = await login(username, password);

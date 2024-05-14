@@ -39,8 +39,8 @@ const FormButton = (props) => {
                 size={size}
                 form={form}
                 className={`${className} ${color && color === "green" ? "green" : null}
-        ${color && color === "red" ? "red" : null} ${color && color === "gray" ? "gray" : null
-                    }`}
+                    ${color && color === "red" ? "red" : null} ${color && color === "gray" ? "gray" : null
+                }`}
                 style={style || { width: width }}
             >
                 {title}

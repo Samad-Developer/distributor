@@ -5,9 +5,9 @@ import Province from '../../screens/locationscreens/Province';
 import City from '../../screens/locationscreens/City'
 import Town from '../../screens/locationscreens/Town'
 import Area from '../../screens/locationscreens/Area'
-import { getData } from '../../services/mainApp.service';
-import { fetchLocationSuccess } from '../../store/reducers/locationSlice';
-import { useDispatch } from 'react-redux';
+// import { getData } from '../../services/mainApp.service';
+// import { fetchLocationSuccess } from '../../store/reducers/locationSlice';
+// import { useDispatch } from 'react-redux';
 
 // const onChange = (event) => {
 //   console.log("tabs are checkng now", event);
@@ -15,41 +15,7 @@ import { useDispatch } from 'react-redux';
 
 
 const LocationConfiguration = () => {
-  const dispatch = useDispatch();
-
-  // Payload for First page open
-  const payload = {
-    "OperationId": 1,
-    "Type": "all",
-    "UserId": 1,
-    "CountryId": null,
-    "ProvinceId": null,
-    "CityId": null,
-    "TownId": null,
-    "AreaId": null,
-    "Country": null,
-    "Province": null,
-    "City": null,
-    "Town": null,
-    "Area": null
-  }
-  // url
-  const url = 'SetupLocationConfig'
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getData(url, payload);
-        dispatch(fetchLocationSuccess(data.DataSet))
-      } catch (error) {
-        console.error('Error fetching location data:', error);
-      }
-    };
-
-    fetchData();
-  }, [])
-
-
+  
   return (
     <Tabs
       defaultActiveKey="1"
