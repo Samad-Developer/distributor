@@ -20,20 +20,20 @@ const FormTextField = ({
   };
 
   return (
-    <Form.Item label={label} name={name} rules={rules} className='mb-3'>
+    <div className='flex flex-col' style={style}>
+      <p>{label}</p>
       <Input
-        size="large" // Adjust size as needed (options include 'large', 'middle', and 'small')
+        size="middle" // Adjust size as needed (options include 'large', 'middle', and 'small')
         placeholder={placeholder}
         type={type}
         value={value}
         onChange={handleChange}
         onBlur={onBlur}
         disabled={disabled}
-        style={{
-            borderColor: borderColor
-        }}
+     
       />
-    </Form.Item>
+   
+    </div>
   );
 };
 

@@ -23,8 +23,7 @@ const FormButton = (props) => {
     } = props;
 
     const clickHandler = (e) => {
-        if (loading === false) onClick(e);
-        else return null;
+        onClick();
     };
 
     return (

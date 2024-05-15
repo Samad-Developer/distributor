@@ -16,7 +16,8 @@ const locationSlice = createSlice({
     },
     fetchLocationSuccess: (state, action) => {
       state.loading = false; // Set loading state to false (optional)
-      state.locationData = action.payload;
+        state.locationData = action.payload;
+        localStorage.setItem('InitialLocationData', JSON.stringify(action.payload));
     },
     fetchLocationFailure: (state, action) => {
       state.loading = false; // Set loading state to false (optional)

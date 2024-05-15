@@ -9,9 +9,9 @@ import Area from '../../screens/locationscreens/Area'
 // import { fetchLocationSuccess } from '../../store/reducers/locationSlice';
 // import { useDispatch } from 'react-redux';
 
-// const onChange = (event) => {
-//   console.log("tabs are checkng now", event);
-// };
+const onChange = (event) => {
+  console.log("tabs are checkng now", event);
+};
 
 
 const LocationConfiguration = () => {

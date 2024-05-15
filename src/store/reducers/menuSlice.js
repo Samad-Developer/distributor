@@ -16,9 +16,11 @@ const menuSlice = createSlice({
     },
     fetchMenuItemsSuccess: (state, action) => {
       state.loading = false; // Set loading state to false (optional)
-      state.menuItems = action.payload.filter(
+      const menu = action.payload.filter(
         (item) => item.Is_Displayed_In_Menu
-      );
+      ); 
+      state.menuItems = menu
+      localStorage.setItem('menuItems', JSON.stringify(menu))
     },
     fetchMenuItemsFailure: (state, action) => {
       state.loading = false; // Set loading state to false (optional)

@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Sidebar = () => {
-  const menuItems = useSelector((state) => state.menu.menuItems);
+  // const menuItems = useSelector((state) => state.menu.menuItems);
+  const menuItems = JSON.parse(localStorage.getItem('menuItems'))
 
   const renderSubMenu = (menuItem) => {
     const childMenus = menuItems.filter((child) => child.Parent_Id === menuItem.MenuId);
