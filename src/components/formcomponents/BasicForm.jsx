@@ -3,7 +3,7 @@ import React from 'react'
 import FormButton from '../../components/generalcomponents/FormButton'
 
 
-const BasicForm = ({ searchPanel, formDrawer, columns, dataSource, handleChange, onOpen, onClose }) => {
+const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, handleChange, onOpen, onClose }) => {
   return (
     <div>
       <div className='mt-2'>
@@ -11,7 +11,7 @@ const BasicForm = ({ searchPanel, formDrawer, columns, dataSource, handleChange,
       </div>
       <div className='flex justify-end'>
         <FormButton
-          title='+ Add New'
+          title={addTitle}
           style={{
             backgroundColor: 'blue',
             color: 'white'

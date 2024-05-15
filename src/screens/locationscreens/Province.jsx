@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import BasicForm from '../../components/formcomponents/BasicForm'
 import { Fragment } from 'react'
 import FormSelect from '../../components/generalcomponents/FormSelect'
@@ -20,10 +20,20 @@ const Province = () => {
   const [visible, setVisible] = useState(false); // State for drawer visibility
   const locationData = JSON.parse(localStorage.getItem('InitialLocationData'));
   const [sortedInfo, setSortedInfo] = useState({});
-  const countriesData = locationData.Table
+  const initialCountries = locationData.Table
+  const [countriesData, setCountriesData] = useState(initialCountries)
   const initialProvincesData = locationData.Table1
-  console.log('country  id', selectedCountry)
   const [provincesData, setProvincesData] = useState(initialProvincesData)
+
+  // useEffect(() => {
+  //   if(JSON.parse(localStorage.getItem('UpdatedLocationData'))){
+  //     const updatedPlaces = JSON.parse(localStorage.getItem('UpdatedLocationData'))
+  //     const updatedCountries = updatedPlaces.Table1
+  //     const extractedData = updatedCountries.map(({ CountryId, Country }) => ({ CountryId, Country }));
+  //     setCountriesData(extractedData)
+  //   }
+  // }, [])
+
   const payload = {
     "OperationId": 2,
     "Type": "province",
@@ -39,9 +49,7 @@ const Province = () => {
     "Town": null,
     "Area": null
   }
-
   const url = 'SetupLocationConfig'
-
 
   const handleSearch = () => {
 
@@ -57,8 +65,9 @@ const Province = () => {
         const data = await getData(url, payload);
         dispatch(fetchUpdatedLocationSuccess(data.DataSet))
         const updatedLocationData = JSON.parse(localStorage.getItem('UpdatedLocationData'));
-        const updatedCountriesData = updatedLocationData.Table1
-        setProvincesData(updatedCountriesData)
+        const updatedProvinceData = updatedLocationData.Table1
+        setProvincesData(updatedProvinceData)
+        // setCountriesData()
 
       } catch (error) {
         console.error('Error fetching location data:', error);
@@ -72,7 +81,7 @@ const Province = () => {
 
   const onClose = () => {
     setVisible(false);
-    setNewCountry('')
+    setNewProvince('')
   };
 
   const onOpen = () => {
@@ -125,6 +134,14 @@ const Province = () => {
         closable={false}
         onClose={onClose}
         open={visible}
+        extra={
+          <Space>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" onClick={onClose}>
+              OK
+            </Button>
+          </Space>
+        }
       >
         <div className=''>
           <FormSelect
@@ -133,7 +150,7 @@ const Province = () => {
             label="Country"
             value={selectedCountry}
             style={{
-              width: '150px'
+              width: '200px'
             }}
             onChange={(event) => {
               setSelectedCountry(event)
@@ -145,7 +162,7 @@ const Province = () => {
             value={newProvince}
             onChange={setNewProvince}
             style={{
-              width: '150px',
+              width: '200px',
               marginTop: '10px'
             }}
           />
@@ -204,6 +221,8 @@ const Province = () => {
         formDrawer={formDrawer}
         columns={columns}
         dataSource={provincesData}
+        addTitle='Add Province'
+        handleChange={handleChange}
       />
     </div>
   )

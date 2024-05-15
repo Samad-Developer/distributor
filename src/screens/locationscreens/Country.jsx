@@ -144,6 +144,14 @@ const Country = () => {
         closable={false}
         onClose={onClose}
         open={visible}
+        extra={
+          <Space>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button type="primary" onClick={onClose}>
+              OK
+            </Button>
+          </Space>
+        }
         closeIcon={<CloseOutlined />}
       >
         <FormTextField
@@ -201,6 +209,7 @@ const Country = () => {
         columns={columns}
         dataSource={countries}
         handleChange={handleChange}
+        addTitle='Add Country'
       />
     </div>
 
