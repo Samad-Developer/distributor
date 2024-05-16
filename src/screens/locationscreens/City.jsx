@@ -221,7 +221,10 @@ const City = () => {
               }}
               showSearch
               filterOption={filterOption}
-              options={provincesData && provincesData.map((option) => ({
+              disabled={!selectedCountry}
+              options={provincesData && provincesData
+                .filter((province) => province.CountryId === selectedCountry)
+                .map((option) => ({
                 value: option.ProvinceId,
                 label: option.Province,
                 key: `${option.Province}-${option.ProvinceId}`,
