@@ -30,6 +30,8 @@ const Area = () => {
   const [cityData, setCityData] = useState()
   const [townData, settownData] = useState()
   const [areaData, setAreaData] = useState()
+   // seaching variable
+   const [filteredAreaData, setFilteredAreaData] = useState()
 
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const Area = () => {
         setCityData(response.DataSet.Table2)
         settownData(response.DataSet.Table3)
         setAreaData(response.DataSet.Table4)
-        console.log('town Data', townData)
+        setFilteredAreaData(response.DataSet.Table4)
         // Handle the response data as needed
       } catch (error) {
         console.error('Error fetching data:', error); // Log any errors
@@ -69,7 +71,37 @@ const Area = () => {
   const url = 'SetupLocationConfig'
 
   const handleSearch = () => {
-    console.log('seaching is working', selectedCountry, selectedProvince, selectedCity, selectedTown, searchArea)
+    const filteredData = areaData.filter((area) => {
+      let matchCountry = true;
+      let matchProvince = true;
+      let matchCity = true;
+      let matchTown = true;
+      let matchSearch = true;
+
+      if (selectedCountry) {
+        matchCountry = area.CountryId === selectedCountry;
+      }
+
+      if (selectedProvince) {
+        matchProvince = area.ProvinceId === selectedProvince;
+      }
+
+      if (selectedCity) {
+        matchCity = area.CityId === selectedCity;
+      }
+
+      if (selectedTown) {
+        matchTown = area.TownId === selectedTown;
+      }
+
+      if (searchArea) {
+        matchSearch = area.Area.toLowerCase().includes(searchArea.toLowerCase());
+      }
+
+      return matchCountry && matchProvince && matchCity && matchTown && matchSearch;
+    });
+
+    setFilteredAreaData(filteredData);
     setSelectedCountry()
     setselectedProvince()
     setSelectedCity()
@@ -87,6 +119,7 @@ const Area = () => {
         const data = await getData(url, payload);
         const updatedAreaData = data.DataSet.Table1
         setAreaData(updatedAreaData)
+        setFilteredAreaData(updatedAreaData)
         // setCountriesData()
       } catch (error) {
         console.error('Error fetching location data:', error);
@@ -428,7 +461,7 @@ const Area = () => {
         onClose={onClose}
         formDrawer={formDrawer}
         columns={columns}
-        dataSource={areaData}
+        dataSource={filteredAreaData}
         addTitle='New Area'
         handleChange={handleChange}
       />

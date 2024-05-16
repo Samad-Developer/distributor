@@ -26,6 +26,8 @@ const City = () => {
   const [countriesData, setCountriesData] = useState()
   const [provincesData, setProvincesData] = useState()
   const [cityData, setCityData] = useState()
+  // seaching variable
+  const [filteredCities, setFilteredCities] = useState()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +36,7 @@ const City = () => {
         setCountriesData(response.DataSet.Table); // Log the response data
         setProvincesData(response.DataSet.Table1)
         setCityData(response.DataSet.Table2)
+        setFilteredCities(response.DataSet.Table2)
         // Handle the response data as needed
       } catch (error) {
         console.error('Error fetching data:', error); // Log any errors
@@ -60,7 +63,13 @@ const City = () => {
   const url = 'SetupLocationConfig'
 
   const handleSearch = () => {
-    console.log('seaching is working', selectedCountry, selectedProvince, searchCity)
+    const filteredCities = cityData.filter((city) => {
+      const matchesCountry = selectedCountry ? city.CountryId === selectedCountry : true;
+      const matchesProvince = selectedProvince ? city.ProvinceId === selectedProvince : true;
+      const matchesCityName = searchCity ? city.City.toLowerCase().includes(searchCity.toLowerCase()) : true;
+      return matchesCountry && matchesProvince && matchesCityName;
+    });
+    setFilteredCities(filteredCities)
     setSelectedCountry()
     setselectedProvince()
     setsearchCity()
@@ -76,6 +85,7 @@ const City = () => {
         const data = await getData(url, payload);
         const updatedCitiesData = data.DataSet.Table1
         setCityData(updatedCitiesData)
+        setFilteredCities(updatedCitiesData)
         // setCountriesData()
       } catch (error) {
         console.error('Error fetching location data:', error);
@@ -104,6 +114,9 @@ const City = () => {
   const handleEdit = (record) => {
     console.log('edit record is comming', record)
   }
+  // filteroption
+  const filterOption = (input, option) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   const searchPanel = (
     <div className='flex'>
@@ -119,6 +132,7 @@ const City = () => {
           onChange={(event) => {
             setSelectedCountry(event)
           }}
+          filterOption={filterOption}
         />
         <div className='flex flex-col'>
           <p className='ml-3'>Province</p>
@@ -128,6 +142,8 @@ const City = () => {
             label='Province'
             name='Province'
             style={{ width: 150, marginLeft: '10px' }}
+            filterOption={filterOption}
+            showSearch
             onChange={(event) => {
               setselectedProvince(event)
             }}
@@ -280,7 +296,7 @@ const City = () => {
         onClose={onClose}
         formDrawer={formDrawer}
         columns={columns}
-        dataSource={cityData}
+        dataSource={filteredCities}
         addTitle='New City'
         handleChange={handleChange}
       />

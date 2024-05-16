@@ -9,7 +9,8 @@ const FormSelect = ({
   disabled = false, 
   placeholder, 
   style, 
-  value
+  value,
+  filterOption
 }) => {
   return (
     <div className='flex flex-col'>
@@ -27,6 +28,8 @@ const FormSelect = ({
           key: `${option.Country}-${option.CountryId}`
         }))}
         style={style}
+        filterOption={filterOption}
+        showSearch
       />
     </div>
   );

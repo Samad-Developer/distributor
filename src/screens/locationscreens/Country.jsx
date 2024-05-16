@@ -10,7 +10,6 @@ import { getData, initialData } from '../../services/mainApp.service';
 const Country = () => {
 
   const [countries, setCountries] = useState()
-  console.log('countries data is chekcing', countries)
   // for search
   const [selectedCountry, setselectedCountry] = useState();
   // for Adding new data
@@ -18,13 +17,16 @@ const Country = () => {
   // State for drawer visibility
   const [visible, setVisible] = useState(false); 
   const [sortedInfo, setSortedInfo] = useState({});
+  // State for filtered countries
+  const [filteredCountries, setFilteredCountries] = useState(); 
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await initialData(); // Call the initialData function
         setCountries(response.DataSet.Table); // Log the response data
-        // Handle the response data as needed
+        setFilteredCountries(response.DataSet.Table); // Initialize filteredCountries with all countries
       } catch (error) {
         console.error('Error fetching data:', error); // Log any errors
       }
@@ -59,6 +61,15 @@ const Country = () => {
   }
 
   const handleSearch = () => {
+    if (!selectedCountry) {
+      setFilteredCountries(countries); // Reset filter if no country is selected
+    } else {
+      const filtered = countries.filter(country =>
+        country.CountryId === selectedCountry
+      );
+      setFilteredCountries(filtered);
+      setselectedCountry()
+    }
   }
 
   const handleAdd = () => {
@@ -68,6 +79,9 @@ const Country = () => {
         const data = await getData(url, payload);
         const updatedCountriesData = data.DataSet.Table1
         setCountries(updatedCountriesData)
+        // Update filteredCountries after adding a new country
+        setFilteredCountries(updatedCountriesData); 
+
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
@@ -86,6 +100,10 @@ const Country = () => {
     setVisible(true)
   }
 
+  // filteroption
+  const filterOption = (input, option) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
   // searchPanel for Seaching Data
   const searchPanel = (
     <div className='flex'>
@@ -103,6 +121,7 @@ const Country = () => {
               onChange={(event) => {
                 setselectedCountry(event)
               }}
+              filterOption={filterOption}
             />
           </div>
           <div>
@@ -195,7 +214,7 @@ const Country = () => {
         onOpen={onOpen}
         onClose={onClose}
         columns={columns}
-        dataSource={countries}
+        dataSource={filteredCountries}
         handleChange={handleChange}
         addTitle='New Country'
       />

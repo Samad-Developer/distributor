@@ -28,6 +28,8 @@ const Town = () => {
   const [provincesData, setProvincesData] = useState()
   const [cityData, setCityData] = useState()
   const [TownData, setTownData] = useState()
+  // seaching variable
+  const [filteredTownData, setFilteredTownData] = useState()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +40,7 @@ const Town = () => {
         setSelectedCity(response.DataSet.Table2)
         setCityData(response.DataSet.Table2)
         setTownData(response.DataSet.Table3)
+        setFilteredTownData(response.DataSet.Table3)
         // Handle the response data as needed
       } catch (error) {
         console.error('Error fetching data:', error); // Log any errors
@@ -64,6 +67,20 @@ const Town = () => {
   const url = 'SetupLocationConfig'
 
   const handleSearch = () => {
+    let filteredData = TownData.filter((town) => {
+      const matches = {
+        country: !selectedCountry || town.CountryId === selectedCountry,
+        province: !selectedProvince || town.ProvinceId === selectedProvince,
+        city: !selectedCity || town.CityId === selectedCity,
+        search: !searchTown || town.Town.toLowerCase().includes(searchTown.toLowerCase()),
+      };
+    
+      // Check if all conditions match
+      return Object.values(matches).every((match) => match);
+    });
+    
+
+    setFilteredTownData(filteredData);
     setSelectedCountry()
     setselectedProvince()
     setSelectedCity()
@@ -80,6 +97,7 @@ const Town = () => {
         const data = await getData(url, payload);
         const updatedTownData = data.DataSet.Table1
         setTownData(updatedTownData)
+        setFilteredTownData(updatedTownData)
         // setCountriesData()
       } catch (error) {
         console.error('Error fetching location data:', error);
@@ -109,21 +127,13 @@ const Town = () => {
   const handleEdit = (record) => {
     console.log('edit record is comming', record)
   }
+  // filteroption
+  // const filterOption = (input, option) =>
+  //   (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   const searchPanel = (
     <div className='flex'>
       <Fragment>
-        {/* <FormSelect
-          options={countriesData}
-          name="Country"
-          label="Country"
-          value={selectedCountry}
-          style={{
-            width: '150px'
-          }}
-          
-        /> */}
-
         <div className='flex flex-col'>
           <p>Country</p>
           <Select
@@ -143,27 +153,6 @@ const Town = () => {
             ))}
           </Select>
         </div>
-
-
-        {/* <div className='flex flex-col'>
-          <p className='ml-3'>Province</p>
-          <Select
-            value={selectedProvince}
-            placeholder={'Select Province'}
-            label='Province'
-            name='Province'
-            style={{ width: 150, marginLeft: '10px' }}
-            onChange={(event) => {
-              setselectedProvince(event)
-            }}
-            options={provincesData && provincesData.map((option) => ({
-              value: option.ProvinceId,
-              label: option.Province,
-              key: `${option.Province}-${option.ProvinceId}`,
-            }))}
-          />
-        </div> */}
-
         <div className='flex flex-col'>
           <p>Province</p>
           <Select
@@ -192,6 +181,7 @@ const Town = () => {
             placeholder={'Select City'}
             style={{ width: 150, marginLeft: '10px' }}
             onChange={(value) => setSelectedCity(value)}
+            
           >
             {cityData && cityData
               // .filter((city) => city.ProvinceId === selectedProvince)
@@ -378,7 +368,7 @@ const Town = () => {
         onClose={onClose}
         formDrawer={formDrawer}
         columns={columns}
-        dataSource={TownData}
+        dataSource={filteredTownData}
         addTitle='New Town'
         handleChange={handleChange}
       />

@@ -24,6 +24,8 @@ const Province = () => {
   const [sortedInfo, setSortedInfo] = useState({});
   const [countriesData, setCountriesData] = useState()
   const [provincesData, setProvincesData] = useState()
+    // State for filtered provinces
+    const [filteredProvinces, setFilteredProvinces] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +34,7 @@ const Province = () => {
         console.log('response is coming in province jsx')
         setCountriesData(response.DataSet.Table); // Log the response data
         setProvincesData(response.DataSet.Table1)
+        setFilteredProvinces(response.DataSet.Table1)
         // Handle the response data as needed
       } catch (error) {
         console.error('Error fetching data:', error); // Log any errors
@@ -58,8 +61,19 @@ const Province = () => {
   const url = 'SetupLocationConfig'
 
   const handleSearch = () => {
-    console.log('seaching is working', selectedCountry, searchProvince)
+    if (!selectedCountry && !searchProvince) {
+      setFilteredProvinces(provincesData); // Reset filter if no country and no search input
+    } else {
+      const filtered = provincesData.filter(province =>
+        (!selectedCountry || province.CountryId === selectedCountry) &&
+        (!searchProvince || province.Province.toLowerCase().includes(searchProvince.toLowerCase()))
+      );
+      setFilteredProvinces(filtered);
+    }
+    setSelectedCountry()
+    setsearchProvince()
   }
+  
 
   const handleChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter);
@@ -71,6 +85,7 @@ const Province = () => {
         const data = await getData(url, payload);
         const updatedProvinceData = data.DataSet.Table1
         setProvincesData(updatedProvinceData)
+        setFilteredProvinces(updatedProvinceData)
         // setCountriesData()
       } catch (error) {
         console.error('Error fetching location data:', error);
@@ -94,6 +109,9 @@ const Province = () => {
   const handleEdit = (record) => {
     console.log('edit record is comming', record)
   }
+  // filteroption
+  const filterOption = (input, option) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   const searchPanel = (
     <div className='flex'>
@@ -110,6 +128,7 @@ const Province = () => {
             onChange={(event) => {
               setSelectedCountry(event)
             }}
+            filterOption={filterOption}
           />
         <FormTextField
           label='province'
@@ -230,7 +249,7 @@ const Province = () => {
         onClose={onClose}
         formDrawer={formDrawer}
         columns={columns}
-        dataSource={provincesData}
+        dataSource={filteredProvinces}
         addTitle='New Province'
         handleChange={handleChange}
       />
