@@ -17,7 +17,6 @@ const updatedLocationSlice = createSlice({
     fetchUpdatedLocationSuccess: (state, action) => {
       state.loading = false;
       state.updatedLocationData = action.payload;
-      localStorage.setItem('UpdatedLocationData', JSON.stringify(action.payload));
     },
     fetchUpdatedLocationFailure: (state, action) => {
       state.loading = false;

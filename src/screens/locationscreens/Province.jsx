@@ -5,34 +5,40 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
-import { Drawer, Space, Button } from 'antd'
+import { Drawer, Space, Button, Select } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
-import { getData } from '../../services/mainApp.service'
+import { getData, initialData } from '../../services/mainApp.service'
 
 
 const Province = () => {
 
   const dispatch = useDispatch()
+  // variable for search
   const [selectedCountry, setSelectedCountry] = useState()
-  const [selectedProvince, setselectedProvince] = useState()
+  const [searchProvince, setsearchProvince] = useState()
+  // varaible for New data
   const [newProvince, setNewProvince] = useState();
-  const [visible, setVisible] = useState(false); // State for drawer visibility
-  const locationData = JSON.parse(localStorage.getItem('InitialLocationData'));
+  // State for drawer visibility
+  const [visible, setVisible] = useState(false);
   const [sortedInfo, setSortedInfo] = useState({});
-  const initialCountries = locationData.Table
-  const [countriesData, setCountriesData] = useState(initialCountries)
-  const initialProvincesData = locationData.Table1
-  const [provincesData, setProvincesData] = useState(initialProvincesData)
+  const [countriesData, setCountriesData] = useState()
+  const [provincesData, setProvincesData] = useState()
 
-  // useEffect(() => {
-  //   if(JSON.parse(localStorage.getItem('UpdatedLocationData'))){
-  //     const updatedPlaces = JSON.parse(localStorage.getItem('UpdatedLocationData'))
-  //     const updatedCountries = updatedPlaces.Table1
-  //     const extractedData = updatedCountries.map(({ CountryId, Country }) => ({ CountryId, Country }));
-  //     setCountriesData(extractedData)
-  //   }
-  // }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await initialData(); // Call the initialData function
+        console.log('response is coming in province jsx')
+        setCountriesData(response.DataSet.Table); // Log the response data
+        setProvincesData(response.DataSet.Table1)
+        // Handle the response data as needed
+      } catch (error) {
+        console.error('Error fetching data:', error); // Log any errors
+      }
+    };
+    fetchData()
+  }, [])
 
   const payload = {
     "OperationId": 2,
@@ -52,7 +58,7 @@ const Province = () => {
   const url = 'SetupLocationConfig'
 
   const handleSearch = () => {
-
+    console.log('seaching is working', selectedCountry, searchProvince)
   }
 
   const handleChange = (pagination, filters, sorter) => {
@@ -63,12 +69,9 @@ const Province = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payload);
-        dispatch(fetchUpdatedLocationSuccess(data.DataSet))
-        const updatedLocationData = JSON.parse(localStorage.getItem('UpdatedLocationData'));
-        const updatedProvinceData = updatedLocationData.Table1
+        const updatedProvinceData = data.DataSet.Table1
         setProvincesData(updatedProvinceData)
         // setCountriesData()
-
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
@@ -88,25 +91,30 @@ const Province = () => {
     setVisible(true)
   }
 
+  const handleEdit = (record) => {
+    console.log('edit record is comming', record)
+  }
+
   const searchPanel = (
     <div className='flex'>
       <Fragment>
-        <FormSelect
-          options={countriesData}
-          name="Country"
-          label="Country"
-          value={selectedCountry}
-          style={{
-            width: '150px'
-          }}
-          onChange={(event) => {
-            setSelectedCountry(event)
-          }}
-        />
+      <FormSelect
+            options={countriesData}
+            name="Country"
+            label="Country"
+            value={selectedCountry}
+            style={{
+              width: '150px'
+            }}
+           
+            onChange={(event) => {
+              setSelectedCountry(event)
+            }}
+          />
         <FormTextField
           label='province'
-          value={selectedProvince}
-          onChange={setselectedProvince}
+          value={searchProvince}
+          onChange={setsearchProvince}
           style={{
             marginLeft: '10px'
           }}
@@ -127,13 +135,14 @@ const Province = () => {
   );
 
   const formDrawer = (
-    <div >
+    <div>
       <Drawer
         title="Add Province"
         placement="right"
         closable={false}
         onClose={onClose}
         open={visible}
+        size='large'
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
@@ -143,15 +152,16 @@ const Province = () => {
           </Space>
         }
       >
-        <div className=''>
+        <div className='flex'>
           <FormSelect
             options={countriesData}
             name="Country"
             label="Country"
             value={selectedCountry}
             style={{
-              width: '200px'
+              width: '150px'
             }}
+           
             onChange={(event) => {
               setSelectedCountry(event)
             }}
@@ -163,14 +173,14 @@ const Province = () => {
             onChange={setNewProvince}
             style={{
               width: '200px',
-              marginTop: '10px'
+              marginLeft: '10px'
             }}
           />
         </div>
         <div className='flex justify-end'>
           <FormButton
             onClick={handleAdd}
-            title='Add Country'
+            title='Add Province'
             style={{
               color: 'white',
               backgroundColor: 'blue'
@@ -201,7 +211,7 @@ const Province = () => {
       key: 'action',
       render: (record) => (
         <Space size="small">
-          <Button type="text" >
+          <Button type="text" onClick={() => handleEdit(record)}>
             <EditTwoTone />
           </Button>
           <Button type="danger">
@@ -221,7 +231,7 @@ const Province = () => {
         formDrawer={formDrawer}
         columns={columns}
         dataSource={provincesData}
-        addTitle='Add Province'
+        addTitle='New Province'
         handleChange={handleChange}
       />
     </div>

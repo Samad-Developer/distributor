@@ -8,13 +8,15 @@ const FormSelect = ({
   onChange, 
   disabled = false, 
   placeholder, 
-  style
+  style, 
+  value
 }) => {
   return (
     <div className='flex flex-col'>
       {label && <label htmlFor={label} className=' text-gray-700 mr-2'>{`${label} : `}</label>}
       <Select
         id={label}
+        value={value}
         defaultValue={defaultValue}
         onChange={onChange}
         disabled={disabled}

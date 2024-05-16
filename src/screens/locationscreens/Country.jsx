@@ -1,28 +1,36 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { Drawer, Table, Space, Button } from 'antd'
-import { useSelector } from 'react-redux'
+import { Drawer, Space, Button } from 'antd'
 import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import BasicForm from '../../components/formcomponents/BasicForm'
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
-import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice';
-import { useDispatch } from 'react-redux'
-import { getData } from '../../services/mainApp.service';
+import { getData, initialData } from '../../services/mainApp.service';
 
 const Country = () => {
 
-  // const locationData = useSelector((state) => state.location.locationData)
-  // dispatch(locationDataLocalStorage)
-  // console.log('location Data is coming', locationData)
-  const dispatch = useDispatch()
-  const locationData = JSON.parse(localStorage.getItem('InitialLocationData'));
-  const countriesData = locationData.Table
-  const [countries, setCountries] = useState(countriesData)
+  const [countries, setCountries] = useState()
+  console.log('countries data is chekcing', countries)
+  // for search
   const [selectedCountry, setselectedCountry] = useState();
+  // for Adding new data
   const [newCountry, setNewCountry] = useState('');
-  const [visible, setVisible] = useState(false); // State for drawer visibility
+  // State for drawer visibility
+  const [visible, setVisible] = useState(false); 
   const [sortedInfo, setSortedInfo] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await initialData(); // Call the initialData function
+        setCountries(response.DataSet.Table); // Log the response data
+        // Handle the response data as needed
+      } catch (error) {
+        console.error('Error fetching data:', error); // Log any errors
+      }
+    };
+    fetchData()
+  }, [])
 
   const payload = {
     "OperationId": 2,
@@ -42,23 +50,6 @@ const Country = () => {
 
   const url = 'SetupLocationConfig'
 
-  // useDispatch(()=> {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await getData(url, payload);
-  //       dispatch(fetchLocationSuccess(data.DataSet))
-  //       const updatedLocationData = JSON.parse(localStorage.getItem('locationData'));
-  //       const updatedCountriesData = updatedLocationData.Table1
-  //       setCountries(updatedCountriesData)
-
-  //     } catch (error) {
-  //       console.error('Error fetching location data:', error);
-  //     }
-  //   };
-
-  //   fetchData();  
-  // }, [])
-
   const handleChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter);
   };
@@ -75,18 +66,15 @@ const Country = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payload);
-        dispatch(fetchUpdatedLocationSuccess(data.DataSet))
-        const updatedLocationData = JSON.parse(localStorage.getItem('UpdatedLocationData'));
-        const updatedCountriesData = updatedLocationData.Table1
+        const updatedCountriesData = data.DataSet.Table1
         setCountries(updatedCountriesData)
-
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
     };
 
     fetchData();
-    console.log('updated Data after insertion', data)
+  
   }
 
   const onClose = () => {
@@ -209,7 +197,7 @@ const Country = () => {
         columns={columns}
         dataSource={countries}
         handleChange={handleChange}
-        addTitle='Add Country'
+        addTitle='New Country'
       />
     </div>
 

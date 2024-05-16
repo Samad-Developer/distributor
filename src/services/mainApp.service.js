@@ -35,4 +35,36 @@ export const login = async (username, password) => {
       throw error; // Re-throw the error for handling in calling components
     }
   };
+
+  export const initialData = async () => {
+    console.log('initial data is calling ')
+    try {
+      const payload = {
+        "OperationId": 1,
+        "Type": "all",
+        "UserId": 1,
+        "CountryId": null,
+        "ProvinceId": null,
+        "CityId": null,
+        "TownId": null,
+        "AreaId": null,
+        "Country": null,
+        "Province": null,
+        "City": null,
+        "Town": null,
+        "Area": null
+    }
+      const response = await axios.post('SetupLocationConfig', payload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };
   
