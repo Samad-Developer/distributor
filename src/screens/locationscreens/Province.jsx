@@ -180,7 +180,7 @@ const Province = () => {
             style={{
               width: '150px'
             }}
-           
+            filterOption={filterOption}
             onChange={(event) => {
               setSelectedCountry(event)
             }}

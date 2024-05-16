@@ -201,6 +201,7 @@ const City = () => {
             name="Country"
             label="Country"
             value={selectedCountry}
+            filterOption={filterOption}
             style={{
               width: '150px'
             }}
