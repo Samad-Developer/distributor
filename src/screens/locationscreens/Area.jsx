@@ -300,7 +300,7 @@ const Area = () => {
           </Space>
         }
       >
-        <div className='flex flex-col'>
+        <div className='grid grid-cols-2 gap-2'>
           <div className='flex flex-col ml-2'>
             <p>Country</p>
             <Select

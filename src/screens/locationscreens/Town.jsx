@@ -233,7 +233,7 @@ const Town = () => {
           </Space>
         }
       >
-        <div className='flex'>
+        <div className='grid grid-cols-2 gap-4'>
           <div className='flex flex-col'>
             <p>Country</p>
             <Select
@@ -242,7 +242,7 @@ const Town = () => {
                 setSelectedCountry(event)
               }}
               style={{
-                width: '150px'
+                width: '200px'
               }}
               placeholder="Select Country"
             >
@@ -262,7 +262,7 @@ const Town = () => {
               onChange={(event) => {
                 setselectedProvince(event)
               }}
-              style={{ width: 150, marginLeft: '10px' }}
+              style={{ width: '200px'}}
             >
               {provincesData && provincesData
                 .filter((province) => province.CountryId === selectedCountry)
@@ -278,7 +278,7 @@ const Town = () => {
             <Select
               value={selectedCity}
               placeholder={'Select City'}
-              style={{ width: 150, marginLeft: '10px' }}
+              style={{ width: '200px' }}
               onChange={(value) => setSelectedCity(value)}
               disabled={!selectedProvince}
             >
@@ -296,7 +296,7 @@ const Town = () => {
             value={newTown}
             onChange={setnewTown}
             style={{
-              marginLeft: '10px'
+              width: '200px'
             }}
           />
 
