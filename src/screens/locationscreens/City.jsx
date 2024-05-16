@@ -219,6 +219,8 @@ const City = () => {
               onChange={(event) => {
                 setselectedProvince(event)
               }}
+              showSearch
+              filterOption={filterOption}
               options={provincesData && provincesData.map((option) => ({
                 value: option.ProvinceId,
                 label: option.Province,
