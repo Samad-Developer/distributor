@@ -1,45 +1,40 @@
 import React, { useState, useEffect } from 'react'
-import BasicForm from '../../components/formcomponents/BasicForm'
-import { Fragment } from 'react'
+import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
+import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import FormTextField from '../../components/generalcomponents/FormTextField'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
-import FormTextField from '../../components/generalcomponents/FormTextField'
-import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
-import { Drawer, Space, Button, Select } from 'antd'
-import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
-import { useDispatch } from 'react-redux'
 import { getData, initialData } from '../../services/mainApp.service'
+import BasicForm from '../../components/formcomponents/BasicForm'
+import { Drawer, Space, Button, Select } from 'antd'
+import { useDispatch } from 'react-redux'
+import { Fragment } from 'react'
 
 
 const Province = () => {
 
   const dispatch = useDispatch()
-  // variable for search
-  const [selectedCountry, setSelectedCountry] = useState()
+  const [selectedCountry, setSelectedCountry] = useState()  // variable for search
   const [searchProvince, setsearchProvince] = useState()
-  // varaible for New data
-  const [newProvince, setNewProvince] = useState();
-  // todo
+  const [newProvince, setNewProvince] = useState();  // varaible for New data
   const [drawerSelectCountry, setDrawerSelectCountry] = useState();
-  // State for drawer visibility
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);  // State for drawer visibility
   const [sortedInfo, setSortedInfo] = useState({});
   const [countriesData, setCountriesData] = useState()
   const [provincesData, setProvincesData] = useState()
-    // State for filtered provinces
-    const [filteredProvinces, setFilteredProvinces] = useState();
+  const [filteredProvinces, setFilteredProvinces] = useState();    // State for filtered provinces
+  const [editingCountry, setEditingCountry] = useState(null); // State for the country being edited
+  const [editingProvince, setEditingProvince] = useState(null); // State for the country being edited
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await initialData(); // Call the initialData function
-        console.log('response is coming in province jsx')
-        setCountriesData(response.DataSet.Table); // Log the response data
+        const response = await initialData(); 
+        setCountriesData(response.DataSet.Table); 
         setProvincesData(response.DataSet.Table1)
         setFilteredProvinces(response.DataSet.Table1)
-        // Handle the response data as needed
       } catch (error) {
-        console.error('Error fetching data:', error); // Log any errors
+        console.error('Error fetching data:', error); 
       }
     };
     fetchData()
@@ -81,10 +76,24 @@ const Province = () => {
     setSortedInfo(sorter);
   };
 
+
   const handleAdd = () => {
+    onClose();
+
+    const payloadToUse = editingCountry ? {
+      ...payload,
+      OperationId: 3, // Edit operation
+      CountryId: editingCountry,
+      ProvinceId: editingProvince,
+      Province: newProvince,
+      Type: "province",
+    } : payload;
+
+    console.log('checking my payload', payloadToUse)
     const fetchData = async () => {
       try {
-        const data = await getData(url, payload);
+        const data = await getData(url, payloadToUse);
+        console.log("checking updated province",data)
         const updatedProvinceData = data.DataSet.Table1
         setProvincesData(updatedProvinceData)
         setFilteredProvinces(updatedProvinceData)
@@ -95,13 +104,14 @@ const Province = () => {
     };
 
     fetchData();
-    setVisible(false)
-
-  }
+    setEditingCountry(null)
+  };
 
   const onClose = () => {
     setVisible(false);
-    setNewProvince('')
+    setNewProvince('');
+    setEditingCountry(null); 
+    setEditingProvince(null)
   };
 
   const onOpen = () => {
@@ -109,8 +119,13 @@ const Province = () => {
   }
 
   const handleEdit = (record) => {
-    setNewProvince(record.Province)
+    setNewProvince(record.Province);
+    setEditingCountry(record.CountryId); // Set the country being edited
+    setEditingProvince(record.ProvinceId)
+    setDrawerSelectCountry(record.Country)
+    setVisible(true); // Open the drawer
   }
+
   // filteroption
   const filterOption = (input, option) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
@@ -158,7 +173,7 @@ const Province = () => {
   const formDrawer = (
     <div>
       <Drawer
-        title="Add Province"
+        title={editingProvince ? "Edit Province" : "Add Province"}
         placement="right"
         closable={false}
         onClose={onClose}
@@ -185,6 +200,7 @@ const Province = () => {
             filterOption={filterOption}
             onChange={(event) => {
               setDrawerSelectCountry(event)
+              setEditingCountry(event)
             }}
           />
           <FormTextField
@@ -201,7 +217,7 @@ const Province = () => {
         <div className='flex justify-end'>
           <FormButton
             onClick={handleAdd}
-            title='Add Province'
+            title={editingProvince ? "Update" : "Add Province"}
             style={{
               color: 'white',
               backgroundColor: 'blue'
@@ -217,7 +233,7 @@ const Province = () => {
       title: 'Country',
       dataIndex: 'Country',
       key: 'CountryId',
-      sorter: (a, b) => a.country.localeCompare(b.country),
+      sorter: (a, b) => a.CountryId.localeCompare(b.CountryId),
       sortOrder: sortedInfo.columnKey === 'CountryId' && sortedInfo.order,
     },
     {

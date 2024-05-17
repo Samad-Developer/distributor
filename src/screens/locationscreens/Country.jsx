@@ -1,24 +1,21 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { Drawer, Space, Button } from 'antd'
-import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
-import BasicForm from '../../components/formcomponents/BasicForm'
+import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons';
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import { getData, initialData } from '../../services/mainApp.service';
+import BasicForm from '../../components/formcomponents/BasicForm'
+import { Drawer, Space, Button } from 'antd'
 
 const Country = () => {
 
   const [countries, setCountries] = useState()
-  // for search
-  const [selectedCountry, setselectedCountry] = useState();
-  // for Adding new data
-  const [newCountry, setNewCountry] = useState('');
-  // State for drawer visibility
-  const [visible, setVisible] = useState(false); 
+  const [selectedCountry, setselectedCountry] = useState();   // State for searching
+  const [newCountry, setNewCountry] = useState('');  // State for Adding new data
+  const [visible, setVisible] = useState(false);   // State for drawer visibility
   const [sortedInfo, setSortedInfo] = useState({});
-  // State for filtered countries
-  const [filteredCountries, setFilteredCountries] = useState(); 
+  const [filteredCountries, setFilteredCountries] = useState();   // State for filtered countries
+  const [editingCountry, setEditingCountry] = useState(null); // State for the country being edited
 
 
   useEffect(() => {
@@ -56,10 +53,33 @@ const Country = () => {
     setSortedInfo(sorter);
   };
 
-  const handleEdit = () => {
-    alert('working....')
+  const handleEdit = (record) => {
+    setNewCountry(record.Country);
+    setEditingCountry(record.CountryId); // Set the country being edited
+    setVisible(true); // Open the drawer
   }
+  const handleDelete = (record) => {
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4, // Edit operation
+      CountryId: record.CountryId,
+      Country: null,
+    } ;
 
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        console.log("checking response", data)
+        const updatedCountriesData = data.DataSet.Table1;
+        setCountries(updatedCountriesData);
+        setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+      }
+    };
+
+    fetchData();
+  }
   const handleSearch = () => {
     if (!selectedCountry) {
       setFilteredCountries(countries); // Reset filter if no country is selected
@@ -74,27 +94,36 @@ const Country = () => {
 
   const handleAdd = () => {
     onClose();
+
+    const payloadToUse = editingCountry ? {
+      ...payload,
+      OperationId: 3, // Edit operation
+      CountryId: editingCountry,
+      Country: newCountry
+    } : payload;
+
     const fetchData = async () => {
       try {
-        const data = await getData(url, payload);
-        const updatedCountriesData = data.DataSet.Table1
-        setCountries(updatedCountriesData)
-        // Update filteredCountries after adding a new country
-        setFilteredCountries(updatedCountriesData); 
-
+        const data = await getData(url, payloadToUse);
+        console.log("checking response", data)
+        const updatedCountriesData = data.DataSet.Table1;
+        setCountries(updatedCountriesData);
+        setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
     };
 
     fetchData();
-  
-  }
+  };
+
 
   const onClose = () => {
     setVisible(false);
-    setNewCountry('')
+    setNewCountry('');
+    setEditingCountry(null); // Reset the editing state
   };
+
 
   const onOpen = () => {
     setVisible(true)
@@ -146,7 +175,7 @@ const Country = () => {
   const formDrawer = (
     <div className='flex justify-between'>
       <Drawer
-        title="Add Country"
+        title={editingCountry ? "Edit Country" : "Add Country"}
         placement="right"
         closable={false}
         onClose={onClose}
@@ -154,8 +183,8 @@ const Country = () => {
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={onClose}>
-              OK
+            <Button type="primary" onClick={handleAdd}>
+              {editingCountry ? "Update" : "OK"}
             </Button>
           </Space>
         }
@@ -170,7 +199,7 @@ const Country = () => {
         <div className='flex justify-end'>
           <FormButton
             onClick={handleAdd}
-            title='Add Country'
+            title={editingCountry ? "Update" : "Add Province"}
             style={{
               color: 'white',
               backgroundColor: 'blue',
@@ -196,10 +225,10 @@ const Country = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text">
-            <EditTwoTone onClick={handleEdit} />
+            <EditTwoTone onClick={() => handleEdit(record)} />
           </Button>
           <Button type="danger">
-            <DeleteTwoTone onClick={handleEdit} />
+            <DeleteTwoTone onClick={() => handleDelete(record)} />
           </Button>
         </Space>
       ),

@@ -20,6 +20,15 @@ export const login = async (username, password) => {
       throw error; // Re-throw error for handling in Login component
     }
   };
+
+  function getNonNullValues(obj) {
+    return Object.entries(obj)
+      .filter(([key, value]) => value !== null)
+      .reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {});
+  }
   
   export const getData = async (url, payload = {}) => {
     try {
