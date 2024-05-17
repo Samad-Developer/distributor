@@ -20,6 +20,10 @@ const City = () => {
   const [searchCity, setsearchCity] = useState()
   // varaible for New data
   const [newCity, setnewCity] = useState()
+  const [drawerSelectCountry, setDrawerSelectCountry] = useState();
+  const [drawerSelectProvince, setDrawerSelectProvince] = useState();
+
+
   // State for drawer visibility
   const [visible, setVisible] = useState(false);
   const [sortedInfo, setSortedInfo] = useState({});
@@ -49,8 +53,8 @@ const City = () => {
     "OperationId": 2,
     "Type": "city",
     "UserId": 1,
-    "CountryId": selectedCountry,
-    "ProvinceId": selectedProvince,
+    "CountryId": drawerSelectCountry,
+    "ProvinceId": drawerSelectProvince,
     "CityId": null,
     "TownId": null,
     "AreaId": null,
@@ -97,6 +101,8 @@ const City = () => {
     setnewCity()
     setselectedProvince()
     setSelectedCountry()
+    setDrawerSelectCountry()
+    setDrawerSelectProvince()
 
   }
 
@@ -105,6 +111,8 @@ const City = () => {
     setnewCity()
     setSelectedCountry()
     setselectedProvince()
+    setDrawerSelectCountry()
+    setDrawerSelectProvince()
   };
 
   const onOpen = () => {
@@ -200,30 +208,30 @@ const City = () => {
             options={countriesData}
             name="Country"
             label="Country"
-            value={selectedCountry}
+            value={drawerSelectCountry}
             filterOption={filterOption}
             style={{
               width: '150px'
             }}
             onChange={(event) => {
-              setSelectedCountry(event)
+              setDrawerSelectCountry(event)
             }}
           />
           <div className='flex flex-col'>
             <p className='ml-3'>Province</p>
             <Select
-              value={selectedProvince}
+              value={drawerSelectProvince}
               placeholder={'Select Province'}
               label='select'
               style={{ width: 150, marginLeft: '10px' }}
               onChange={(event) => {
-                setselectedProvince(event)
+                setDrawerSelectProvince(event)
               }}
               showSearch
               filterOption={filterOption}
-              disabled={!selectedCountry}
+              disabled={!drawerSelectCountry}
               options={provincesData && provincesData
-                .filter((province) => province.CountryId === selectedCountry)
+                .filter((province) => province.CountryId === drawerSelectCountry)
                 .map((option) => ({
                 value: option.ProvinceId,
                 label: option.Province,

@@ -22,6 +22,10 @@ const Area = () => {
   const [searchArea, setsearchArea] = useState()
   // varaible for New data
   const [newArea, setnewArea] = useState()
+  const [drawerSelectCountry, setDrawerSelectCountry] = useState();
+  const [drawerSelectProvince, setDrawerSelectProvince] = useState();
+  const [drawerSelectCity, setDrawerSelectCity] = useState();
+  const [drawerSelectTown, setDrawerSelectTown] = useState();
   // State for drawer visibility
   const [visible, setVisible] = useState(false);
   const [sortedInfo, setSortedInfo] = useState({});
@@ -57,10 +61,10 @@ const Area = () => {
     "OperationId": 2,
     "Type": "area",
     "UserId": 1,
-    "CountryId": selectedCountry,
-    "ProvinceId": selectedProvince,
-    "CityId": selectedCity,
-    "TownId": selectedTown,
+    "CountryId": drawerSelectCountry,
+    "ProvinceId": drawerSelectProvince,
+    "CityId": drawerSelectCity,
+    "TownId": drawerSelectTown,
     "AreaId": null,
     "Country": null,
     "Province": null,
@@ -133,6 +137,10 @@ const Area = () => {
     setSelectedCountry()
     setSelectedCity()
     setSelectedTown()
+    setDrawerSelectCountry()
+    setDrawerSelectProvince()
+    setDrawerSelectTown()
+    setDrawerSelectCity()
 
   }
 
@@ -143,6 +151,10 @@ const Area = () => {
     setselectedProvince()
     setSelectedTown()
     setSelectedCity()
+    setDrawerSelectCountry()
+    setDrawerSelectProvince()
+    setDrawerSelectTown()
+    setDrawerSelectCity()
   };
 
   const onOpen = () => {
@@ -304,9 +316,9 @@ const Area = () => {
           <div className='flex flex-col ml-2'>
             <p>Country</p>
             <Select
-              value={selectedCountry}
+              value={drawerSelectCountry}
               onChange={(event) => {
-                setSelectedCountry(event)
+                setDrawerSelectCountry(event)
               }}
               style={{
                 width: '200px'
@@ -323,16 +335,16 @@ const Area = () => {
           <div className='flex flex-col'>
             <p className='ml-2'>Province</p>
             <Select
-              value={selectedProvince}
+              value={drawerSelectProvince}
               placeholder="Select Province"
-              disabled={!selectedCountry} // Disable province selection until a country is selected
+              disabled={!drawerSelectCountry} // Disable province selection until a country is selected
               onChange={(event) => {
-                setselectedProvince(event)
+                setDrawerSelectProvince(event)
               }}
               style={{ width: 200, marginLeft: '10px' }}
             >
               {provincesData && provincesData
-                .filter((province) => province.CountryId === selectedCountry)
+                .filter((province) => province.CountryId === drawerSelectCountry)
                 .map((province) => (
                   <Option key={province.ProvinceId} value={province.ProvinceId}>
                     {province.Province}
@@ -343,14 +355,14 @@ const Area = () => {
           <div className='flex flex-col'>
             <p className='ml-3'>City</p>
             <Select
-              value={selectedCity}
+              value={drawerSelectCity}
               placeholder={'Select City'}
               style={{ width: 200, marginLeft: '10px' }}
-              onChange={(value) => setSelectedCity(value)}
-              disabled={!selectedProvince}
+              onChange={(value) => setDrawerSelectCity(value)}
+              disabled={!drawerSelectProvince}
             >
               {cityData && cityData
-                .filter((city) => city.ProvinceId === selectedProvince)
+                .filter((city) => city.ProvinceId === drawerSelectProvince)
                 .map((city) => (
                   <Option key={city.CityId} value={city.CityId}>
                     {city.City}
@@ -361,14 +373,14 @@ const Area = () => {
           <div className='flex flex-col'>
             <p className='ml-3'>Town</p>
             <Select
-              value={selectedTown}
+              value={drawerSelectTown}
               placeholder={'Select Town'}
               style={{ width: 200, marginLeft: '10px' }}
-              onChange={(value) => setSelectedTown(value)}
-              disabled={!selectedCity}
+              onChange={(value) => setDrawerSelectTown(value)}
+              disabled={!drawerSelectCity}
             >
               {townData && townData
-              .filter((town) => town.CityId === selectedCity)
+              .filter((town) => town.CityId === drawerSelectCity)
               .map((town) => (
                 <Option key={town.TownId} value={town.TownId}>
                   {town.Town}

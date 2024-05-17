@@ -109,7 +109,6 @@ const Province = () => {
   }
 
   const handleEdit = (record) => {
-    console.log('edit record is comming', record)
     setNewProvince(record.Province)
   }
   // filteroption

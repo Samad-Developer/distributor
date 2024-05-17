@@ -21,6 +21,10 @@ const Town = () => {
   const [searchTown, setsearchTown] = useState()
   // varaible for New data
   const [newTown, setnewTown] = useState()
+  const [drawerSelectCountry, setDrawerSelectCountry] = useState();
+  const [drawerSelectProvince, setDrawerSelectProvince] = useState();
+  const [drawerSelectCity, setDrawerSelectCity] = useState();
+
   // State for drawer visibility
   const [visible, setVisible] = useState(false);
   const [sortedInfo, setSortedInfo] = useState({});
@@ -53,9 +57,9 @@ const Town = () => {
     "OperationId": 2,
     "Type": "town",
     "UserId": 1,
-    "CountryId": selectedCountry,
-    "ProvinceId": selectedProvince,
-    "CityId": selectedCity,
+    "CountryId": drawerSelectCountry,
+    "ProvinceId": drawerSelectProvince,
+    "CityId": drawerSelectCity,
     "TownId": null,
     "AreaId": null,
     "Country": null,
@@ -85,6 +89,7 @@ const Town = () => {
     setselectedProvince()
     setSelectedCity()
     setsearchTown()
+    
   }
 
   const handleChange = (pagination, filters, sorter) => {
@@ -109,6 +114,9 @@ const Town = () => {
     setnewTown()
     setselectedProvince()
     setSelectedCountry()
+    setDrawerSelectCountry()
+    setDrawerSelectProvince()
+    setDrawerSelectCity()
 
   }
 
@@ -118,6 +126,9 @@ const Town = () => {
     setSelectedCountry()
     setselectedProvince()
     setSelectedCity()
+    setDrawerSelectCountry()
+    setDrawerSelectProvince()
+    setDrawerSelectCity()
   };
 
   const onOpen = () => {
@@ -237,9 +248,9 @@ const Town = () => {
           <div className='flex flex-col'>
             <p>Country</p>
             <Select
-              value={selectedCountry}
+              value={drawerSelectCountry}
               onChange={(event) => {
-                setSelectedCountry(event)
+                setDrawerSelectCountry(event)
               }}
               style={{
                 width: '200px'
@@ -256,16 +267,16 @@ const Town = () => {
           <div className='flex flex-col'>
             <p>Province</p>
             <Select
-              value={selectedProvince}
+              value={drawerSelectProvince}
               placeholder="Select Province"
-              disabled={!selectedCountry} // Disable province selection until a country is selected
+              disabled={!drawerSelectCountry} // Disable province selection until a country is selected
               onChange={(event) => {
-                setselectedProvince(event)
+                setDrawerSelectProvince(event)
               }}
               style={{ width: '200px'}}
             >
               {provincesData && provincesData
-                .filter((province) => province.CountryId === selectedCountry)
+                .filter((province) => province.CountryId === drawerSelectCountry)
                 .map((province) => (
                   <Option key={province.ProvinceId} value={province.ProvinceId}>
                     {province.Province}
@@ -276,14 +287,14 @@ const Town = () => {
           <div className='flex flex-col'>
             <p className='ml-3'>City</p>
             <Select
-              value={selectedCity}
+              value={drawerSelectCity}
               placeholder={'Select City'}
               style={{ width: '200px' }}
-              onChange={(value) => setSelectedCity(value)}
-              disabled={!selectedProvince}
+              onChange={(value) => setDrawerSelectCity(value)}
+              disabled={!drawerSelectProvince}
             >
               {cityData && cityData
-                .filter((city) => city.ProvinceId === selectedProvince)
+                .filter((city) => city.ProvinceId === drawerSelectProvince)
                 .map((city) => (
                   <Option key={city.CityId} value={city.CityId}>
                     {city.City}
