@@ -19,6 +19,8 @@ const Province = () => {
   const [searchProvince, setsearchProvince] = useState()
   // varaible for New data
   const [newProvince, setNewProvince] = useState();
+  // todo
+  const [drawerSelectCountry, setDrawerSelectCountry] = useState();
   // State for drawer visibility
   const [visible, setVisible] = useState(false);
   const [sortedInfo, setSortedInfo] = useState({});
@@ -47,7 +49,7 @@ const Province = () => {
     "OperationId": 2,
     "Type": "province",
     "UserId": 1,
-    "CountryId": selectedCountry,
+    "CountryId": drawerSelectCountry,       
     "ProvinceId": null,
     "CityId": null,
     "TownId": null,
@@ -108,6 +110,7 @@ const Province = () => {
 
   const handleEdit = (record) => {
     console.log('edit record is comming', record)
+    setNewProvince(record.Province)
   }
   // filteroption
   const filterOption = (input, option) =>
@@ -176,13 +179,13 @@ const Province = () => {
             options={countriesData}
             name="Country"
             label="Country"
-            value={selectedCountry}
+            value={drawerSelectCountry}
             style={{
               width: '150px'
             }}
             filterOption={filterOption}
             onChange={(event) => {
-              setSelectedCountry(event)
+              setDrawerSelectCountry(event)
             }}
           />
           <FormTextField
