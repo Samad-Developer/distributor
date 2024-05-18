@@ -33,8 +33,7 @@ const City = () => {
   // seaching variable
   const [filteredCities, setFilteredCities] = useState()
   // for editing
-  const [editingCountry, setEditingCountry] = useState(null); 
-  const [editingProvince, setEditingProvince] = useState(null);
+  const [editDisplay, setEditDisplay] = useState();
   const [editingCity, setEditingCity] = useState(null);
 
   useEffect(() => {
@@ -89,19 +88,18 @@ const City = () => {
 
   const handleAdd = () => {
     onClose();
-    const payloadToUse = editingCountry ? {
+    const payloadToUse = editDisplay ? {
       ...payload,
       OperationId: 3, // Edit operation
-      CountryId: editingCountry,
-      ProvinceId: editingProvince,
+      CountryId: drawerSelectCountry,
+      ProvinceId: drawerSelectProvince,
       CityId: editingCity,
       City: newCity,
     } : payload;
-    console.log('checking my payload', payloadToUse)
+    console.log('cehcking my payload', payloadToUse)
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log('response', data)
         const updatedCitiesData = data.DataSet.Table1
         setCityData(updatedCitiesData)
         setFilteredCities(updatedCitiesData)
@@ -117,13 +115,10 @@ const City = () => {
   const onClose = () => {
     setVisible(false);
     setnewCity()
-    // setSelectedCountry()
-    // setselectedProvince()
     setDrawerSelectCountry()
     setDrawerSelectProvince()
     setEditingCity(null)
-    setEditingCountry(null)
-    setEditingProvince(null)
+    setEditDisplay(null)
   };
 
   const onOpen = () => {
@@ -131,13 +126,11 @@ const City = () => {
   }
 
   const handleEdit = (record) => {
-    console.log('checking my record',record)
     setnewCity(record.City);
-    setEditingCountry(record.CountryId); // Set the country being edited
-    setEditingProvince(record.ProvinceId)
+    setEditDisplay(record.CityId)
     setEditingCity(record.CityId)
-    setDrawerSelectCountry(record.Country)
-    setDrawerSelectProvince(record.Province)
+    setDrawerSelectCountry(record.CountryId)
+    setDrawerSelectProvince(record.ProvinceId)
     setVisible(true); // Open the drawer
   }
 
@@ -152,11 +145,9 @@ const City = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log('response', data)
         const updatedCitiesData = data.DataSet.Table1
         setCityData(updatedCitiesData)
         setFilteredCities(updatedCitiesData)
-        // setCountriesData()
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
@@ -230,7 +221,7 @@ const City = () => {
   const formDrawer = (
     <div>
       <Drawer
-        title={editingProvince ? "Edit City" : "Add City"}
+        title={editDisplay ? "Edit City" : "Add City"}
         placement="right"
         closable={false}
         onClose={onClose}
@@ -257,6 +248,7 @@ const City = () => {
             }}
             onChange={(event) => {
               setDrawerSelectCountry(event)
+              
             }}
           />
           <div className='flex flex-col'>
@@ -295,7 +287,7 @@ const City = () => {
         <div className='flex justify-end'>
           <FormButton
             onClick={handleAdd}
-            title={editingProvince ? "Update" : "Add City"}
+            title={editDisplay ? "Update" : "Add City"}
             style={{
               color: 'white',
               backgroundColor: 'blue'
