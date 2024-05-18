@@ -109,7 +109,7 @@ const Town = () => {
       TownId: editTown,
       Town: newTown,
     } : payload;
-    console.log('payload i passed', payloadToUse)
+
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);

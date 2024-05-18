@@ -10,10 +10,8 @@ import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocatio
 import { useDispatch } from 'react-redux'
 import { getData, initialData } from '../../services/mainApp.service'
 
-
 const Area = () => {
 
-  const dispatch = useDispatch()
   // variable for search
   const [selectedCountry, setSelectedCountry] = useState()
   const [selectedProvince, setselectedProvince] = useState();
@@ -40,21 +38,19 @@ const Area = () => {
   const [editArea, setEditArea] = useState()
   const [editDisplay, setEditDisplay] = useState();
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await initialData(); // Call the initialData function
-        setCountriesData(response.DataSet.Table); // Log the response data
+        const response = await initialData(); 
+        setCountriesData(response.DataSet.Table); 
         setProvincesData(response.DataSet.Table1)
         setSelectedCity(response.DataSet.Table2)
         setCityData(response.DataSet.Table2)
         settownData(response.DataSet.Table3)
         setAreaData(response.DataSet.Table4)
         setFilteredAreaData(response.DataSet.Table4)
-        // Handle the response data as needed
       } catch (error) {
-        console.error('Error fetching data:', error); // Log any errors
+        console.error('Error fetching data:', error); 
       }
     };
     fetchData()
@@ -138,12 +134,10 @@ const Area = () => {
         const updatedAreaData = data.DataSet.Table1
         setAreaData(updatedAreaData)
         setFilteredAreaData(updatedAreaData)
-        // setCountriesData()
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
     };
-
     fetchData();
   }
 
@@ -191,29 +185,16 @@ const Area = () => {
         const updatedAreaData = data.DataSet.Table1
         setAreaData(updatedAreaData)
         setFilteredAreaData(updatedAreaData)
-        // setCountriesData()
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
     };
-
     fetchData();
   }
 
   const searchPanel = (
     <div className='flex'>
       <Fragment>
-        {/* <FormSelect
-          options={countriesData}
-          name="Country"
-          label="Country"
-          value={selectedCountry}
-          style={{
-            width: '150px'
-          }}
-          
-        /> */}
-
         <div className='flex flex-col'>
           <p>Country</p>
           <Select
@@ -233,27 +214,6 @@ const Area = () => {
             ))}
           </Select>
         </div>
-
-
-        {/* <div className='flex flex-col'>
-          <p className='ml-3'>Province</p>
-          <Select
-            value={selectedProvince}
-            placeholder={'Select Province'}
-            label='Province'
-            name='Province'
-            style={{ width: 150, marginLeft: '10px' }}
-            onChange={(event) => {
-              setselectedProvince(event)
-            }}
-            options={provincesData && provincesData.map((option) => ({
-              value: option.ProvinceId,
-              label: option.Province,
-              key: `${option.Province}-${option.ProvinceId}`,
-            }))}
-          />
-        </div> */}
-
         <div className='flex flex-col'>
           <p>Province</p>
           <Select
@@ -305,7 +265,6 @@ const Area = () => {
             ))}
           </Select>
         </div>
-
         <FormTextField
           label='Area'
           value={searchArea}
@@ -372,7 +331,7 @@ const Area = () => {
             <Select
               value={drawerSelectProvince}
               placeholder="Select Province"
-              disabled={!drawerSelectCountry} // Disable province selection until a country is selected
+              disabled={!drawerSelectCountry}
               onChange={(event) => {
                 setDrawerSelectProvince(event)
               }}
@@ -432,7 +391,6 @@ const Area = () => {
               width: '200px'
             }}
           />
-
         </div>
         <div className='flex justify-end mt-2'>
           <FormButton

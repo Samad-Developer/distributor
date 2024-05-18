@@ -5,7 +5,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import { getData, initialData } from '../../services/mainApp.service';
 import BasicForm from '../../components/formcomponents/BasicForm'
-import { Drawer, Space, Button } from 'antd'
+import { Drawer, Space, Button, Popconfirm } from 'antd'
 
 const Country = () => {
 
@@ -64,12 +64,12 @@ const Country = () => {
       OperationId: 4, // Edit operation
       CountryId: record.CountryId,
       Country: null,
-    } ;
+    };
 
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log("checking response", data)
+        console.log("checking response...", data.DataSet.Table[0].Message)
         const updatedCountriesData = data.DataSet.Table1;
         setCountries(updatedCountriesData);
         setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
@@ -93,7 +93,7 @@ const Country = () => {
   }
 
   const handleAdd = () => {
-    
+
     const payloadToUse = editingCountry ? {
       ...payload,
       OperationId: 3, // Edit operation
@@ -112,7 +112,7 @@ const Country = () => {
         console.error('Error fetching location data:', error);
       }
     };
-    
+
     onClose();
     fetchData();
   };
@@ -199,7 +199,7 @@ const Country = () => {
         <div className='flex justify-end'>
           <FormButton
             onClick={handleAdd}
-            title={editingCountry ? "Update" : "Add Province"}
+            title={editingCountry ? "Update" : "Add Country"}
             style={{
               color: 'white',
               backgroundColor: 'blue',
@@ -227,9 +227,17 @@ const Country = () => {
           <Button type="text">
             <EditTwoTone onClick={() => handleEdit(record)} />
           </Button>
-          <Button type="danger">
-            <DeleteTwoTone onClick={() => handleDelete(record)} />
-          </Button>
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this Country?"
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => handleDelete(record)}
+          >
+            <Button type="danger">
+              <DeleteTwoTone/>
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },
