@@ -138,6 +138,30 @@ const Town = () => {
   const handleEdit = (record) => {
     console.log('edit record is comming', record)
   }
+
+  const handleDelete = (record) => {
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4,
+      CountryId: record.CountryId,
+      ProvinceId: record.ProvinceId,
+      CityId: record.CityId,
+      TownId: record.TownId
+    } ;
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        console.log('responnse', data)
+        const updatedTownData = data.DataSet.Table1
+        setTownData(updatedTownData)
+        setFilteredTownData(updatedTownData)
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+      }
+    }
+
+    fetchData();
+  }
   // filteroption
   // const filterOption = (input, option) =>
   //   (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
@@ -363,7 +387,7 @@ const Town = () => {
           <Button type="text" onClick={() => handleEdit(record)}>
             <EditTwoTone />
           </Button>
-          <Button type="danger">
+          <Button type="danger" onClick={() => handleDelete(record)}>
             <DeleteTwoTone />
           </Button>
         </Space>

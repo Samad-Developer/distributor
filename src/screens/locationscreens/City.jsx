@@ -32,6 +32,10 @@ const City = () => {
   const [cityData, setCityData] = useState()
   // seaching variable
   const [filteredCities, setFilteredCities] = useState()
+  // for editing
+  const [editingCountry, setEditingCountry] = useState(null); 
+  const [editingProvince, setEditingProvince] = useState(null);
+  const [editingCity, setEditingCity] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,9 +88,20 @@ const City = () => {
   };
 
   const handleAdd = () => {
+    onClose();
+    const payloadToUse = editingCountry ? {
+      ...payload,
+      OperationId: 3, // Edit operation
+      CountryId: editingCountry,
+      ProvinceId: editingProvince,
+      CityId: editingCity,
+      City: newCity,
+    } : payload;
+    console.log('checking my payload', payloadToUse)
     const fetchData = async () => {
       try {
-        const data = await getData(url, payload);
+        const data = await getData(url, payloadToUse);
+        console.log('response', data)
         const updatedCitiesData = data.DataSet.Table1
         setCityData(updatedCitiesData)
         setFilteredCities(updatedCitiesData)
@@ -97,22 +112,18 @@ const City = () => {
     };
 
     fetchData();
-    setVisible(false)
-    setnewCity()
-    setselectedProvince()
-    setSelectedCountry()
-    setDrawerSelectCountry()
-    setDrawerSelectProvince()
-
   }
 
   const onClose = () => {
     setVisible(false);
     setnewCity()
-    setSelectedCountry()
-    setselectedProvince()
+    // setSelectedCountry()
+    // setselectedProvince()
     setDrawerSelectCountry()
     setDrawerSelectProvince()
+    setEditingCity(null)
+    setEditingCountry(null)
+    setEditingProvince(null)
   };
 
   const onOpen = () => {
@@ -120,7 +131,38 @@ const City = () => {
   }
 
   const handleEdit = (record) => {
-    console.log('edit record is comming', record)
+    console.log('checking my record',record)
+    setnewCity(record.City);
+    setEditingCountry(record.CountryId); // Set the country being edited
+    setEditingProvince(record.ProvinceId)
+    setEditingCity(record.CityId)
+    setDrawerSelectCountry(record.Country)
+    setDrawerSelectProvince(record.Province)
+    setVisible(true); // Open the drawer
+  }
+
+  const handleDelete = (record) => {
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4,
+      CountryId: record.CountryId,
+      ProvinceId: record.ProvinceId,
+      CityId: record.CityId
+    } ;
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        console.log('response', data)
+        const updatedCitiesData = data.DataSet.Table1
+        setCityData(updatedCitiesData)
+        setFilteredCities(updatedCitiesData)
+        // setCountriesData()
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+      }
+    };
+
+    fetchData();
   }
   // filteroption
   const filterOption = (input, option) =>
@@ -188,7 +230,7 @@ const City = () => {
   const formDrawer = (
     <div>
       <Drawer
-        title="Add City"
+        title={editingProvince ? "Edit City" : "Add City"}
         placement="right"
         closable={false}
         onClose={onClose}
@@ -253,7 +295,7 @@ const City = () => {
         <div className='flex justify-end'>
           <FormButton
             onClick={handleAdd}
-            title='Add City'
+            title={editingProvince ? "Update" : "Add City"}
             style={{
               color: 'white',
               backgroundColor: 'blue'
@@ -294,7 +336,7 @@ const City = () => {
           <Button type="text" onClick={() => handleEdit(record)}>
             <EditTwoTone />
           </Button>
-          <Button type="danger">
+          <Button type="danger" onClick={() => handleDelete(record)}>
             <DeleteTwoTone />
           </Button>
         </Space>

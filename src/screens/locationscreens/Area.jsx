@@ -165,6 +165,31 @@ const Area = () => {
     console.log('edit record is comming', record)
   }
 
+  const handleDelete = (record) => {
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4,
+      CountryId: record.CountryId,
+      ProvinceId: record.ProvinceId,
+      CityId: record.CityId,
+      TownId: record.TownId,
+      AreaId: record.AreaId
+    } ;
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        const updatedAreaData = data.DataSet.Table1
+        setAreaData(updatedAreaData)
+        setFilteredAreaData(updatedAreaData)
+        // setCountriesData()
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+      }
+    };
+
+    fetchData();
+  }
+
   const searchPanel = (
     <div className='flex'>
       <Fragment>
@@ -457,7 +482,7 @@ const Area = () => {
           <Button type="text" onClick={() => handleEdit(record)}>
             <EditTwoTone />
           </Button>
-          <Button type="danger">
+          <Button type="danger" onClick={() => handleDelete(record)}>
             <DeleteTwoTone />
           </Button>
         </Space>

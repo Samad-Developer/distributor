@@ -93,8 +93,7 @@ const Country = () => {
   }
 
   const handleAdd = () => {
-    onClose();
-
+    
     const payloadToUse = editingCountry ? {
       ...payload,
       OperationId: 3, // Edit operation
@@ -113,7 +112,8 @@ const Country = () => {
         console.error('Error fetching location data:', error);
       }
     };
-
+    
+    onClose();
     fetchData();
   };
 

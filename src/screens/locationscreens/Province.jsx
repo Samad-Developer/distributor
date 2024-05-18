@@ -80,16 +80,14 @@ const Province = () => {
   const handleAdd = () => {
     onClose();
 
-    const payloadToUse = editingCountry ? {
+    const payloadToUse = editingProvince ? {
       ...payload,
       OperationId: 3, // Edit operation
       CountryId: editingCountry,
       ProvinceId: editingProvince,
       Province: newProvince,
-      Type: "province",
     } : payload;
 
-    console.log('checking my payload', payloadToUse)
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
@@ -111,7 +109,8 @@ const Province = () => {
     setVisible(false);
     setNewProvince('');
     setEditingCountry(null); 
-    setEditingProvince(null)
+    setEditingProvince(null);
+    setDrawerSelectCountry()
   };
 
   const onOpen = () => {
@@ -228,6 +227,28 @@ const Province = () => {
     </div>
   )
 
+  const handleDelete = (record) => {
+    
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4, 
+      CountryId: record.CountryId,
+      ProvinceId: record.ProvinceId,
+    } ;
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        console.log("checking updated province",data)
+        const updatedProvinceData = data.DataSet.Table1
+        setProvincesData(updatedProvinceData)
+        setFilteredProvinces(updatedProvinceData) // Update filteredCountries after adding or editing a country
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+      }
+    };
+    fetchData();
+  }
+
   const columns = [
     {
       title: 'Country',
@@ -251,7 +272,7 @@ const Province = () => {
           <Button type="text" onClick={() => handleEdit(record)}>
             <EditTwoTone />
           </Button>
-          <Button type="danger">
+          <Button type="danger" onClick={() => handleDelete(record)}>
             <DeleteTwoTone />
           </Button>
         </Space>
