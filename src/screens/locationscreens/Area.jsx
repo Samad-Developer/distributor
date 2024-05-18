@@ -36,6 +36,9 @@ const Area = () => {
   const [areaData, setAreaData] = useState()
    // seaching variable
    const [filteredAreaData, setFilteredAreaData] = useState()
+     // variable for editing
+  const [editArea, setEditArea] = useState()
+  const [editDisplay, setEditDisplay] = useState();
 
 
   useEffect(() => {
@@ -118,9 +121,20 @@ const Area = () => {
   };
 
   const handleAdd = () => {
+    onClose();
+    const payloadToUse = editDisplay ? {
+      ...payload,
+      OperationId: 3, // Edit operation
+      CountryId: drawerSelectCountry,
+      ProvinceId: drawerSelectProvince,
+      CityId: drawerSelectCity,
+      TownId: drawerSelectTown,
+      AreaId: editArea,
+      Area: newArea,
+    } : payload;
     const fetchData = async () => {
       try {
-        const data = await getData(url, payload);
+        const data = await getData(url, payloadToUse);
         const updatedAreaData = data.DataSet.Table1
         setAreaData(updatedAreaData)
         setFilteredAreaData(updatedAreaData)
@@ -131,17 +145,6 @@ const Area = () => {
     };
 
     fetchData();
-    setVisible(false)
-    setnewArea()
-    setselectedProvince()
-    setSelectedCountry()
-    setSelectedCity()
-    setSelectedTown()
-    setDrawerSelectCountry()
-    setDrawerSelectProvince()
-    setDrawerSelectTown()
-    setDrawerSelectCity()
-
   }
 
   const onClose = () => {
@@ -162,7 +165,14 @@ const Area = () => {
   }
 
   const handleEdit = (record) => {
-    console.log('edit record is comming', record)
+    setVisible(true); // Open the drawer
+    setnewArea(record.Area);
+    setEditDisplay(record.CityId)
+    setEditArea(record.AreaId)
+    setDrawerSelectCountry(record.CountryId)
+    setDrawerSelectProvince(record.ProvinceId)
+    setDrawerSelectCity(record.CityId)
+    setDrawerSelectTown(record.TownId)
   }
 
   const handleDelete = (record) => {
@@ -322,7 +332,7 @@ const Area = () => {
   const formDrawer = (
     <div>
       <Drawer
-        title="Add Area"
+        title={editDisplay ? "Edit Area" : "Add Area"}
         placement="right"
         closable={false}
         onClose={onClose}
@@ -427,7 +437,7 @@ const Area = () => {
         <div className='flex justify-end mt-2'>
           <FormButton
             onClick={handleAdd}
-            title='Add Town'
+            title={editDisplay ? "Edit Area" : "Add Area"}
             style={{
               color: 'white',
               backgroundColor: 'blue'

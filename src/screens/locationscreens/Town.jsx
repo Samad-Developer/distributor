@@ -35,6 +35,10 @@ const Town = () => {
   // seaching variable
   const [filteredTownData, setFilteredTownData] = useState()
 
+  // variable for editing
+  const [editTown, setEditTown] = useState()
+  const [editDisplay, setEditDisplay] = useState();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,13 +87,11 @@ const Town = () => {
       return Object.values(matches).every((match) => match);
     });
     
-
     setFilteredTownData(filteredData);
     setSelectedCountry()
     setselectedProvince()
     setSelectedCity()
     setsearchTown()
-    
   }
 
   const handleChange = (pagination, filters, sorter) => {
@@ -97,9 +99,21 @@ const Town = () => {
   };
 
   const handleAdd = () => {
+    onClose();
+    const payloadToUse = editDisplay ? {
+      ...payload,
+      OperationId: 3, // Edit operation
+      CountryId: drawerSelectCountry,
+      ProvinceId: drawerSelectProvince,
+      CityId: drawerSelectCity,
+      TownId: editTown,
+      Town: newTown,
+    } : payload;
+    console.log('payload i passed', payloadToUse)
     const fetchData = async () => {
       try {
-        const data = await getData(url, payload);
+        const data = await getData(url, payloadToUse);
+        console.log('response', data)
         const updatedTownData = data.DataSet.Table1
         setTownData(updatedTownData)
         setFilteredTownData(updatedTownData)
@@ -110,13 +124,13 @@ const Town = () => {
     };
 
     fetchData();
-    setVisible(false)
-    setnewTown()
-    setselectedProvince()
-    setSelectedCountry()
-    setDrawerSelectCountry()
-    setDrawerSelectProvince()
-    setDrawerSelectCity()
+    // setVisible(false)
+    // setnewTown()
+    // setselectedProvince()
+    // setSelectedCountry()
+    // setDrawerSelectCountry()
+    // setDrawerSelectProvince()
+    // setDrawerSelectCity()
 
   }
 
@@ -136,7 +150,13 @@ const Town = () => {
   }
 
   const handleEdit = (record) => {
-    console.log('edit record is comming', record)
+    setVisible(true); // Open the drawer
+    setnewTown(record.Town);
+    setEditDisplay(record.CityId)
+    setEditTown(record.TownId)
+    setDrawerSelectCountry(record.CountryId)
+    setDrawerSelectProvince(record.ProvinceId)
+    setDrawerSelectCity(record.CityId)
   }
 
   const handleDelete = (record) => {
@@ -253,7 +273,7 @@ const Town = () => {
   const formDrawer = (
     <div>
       <Drawer
-        title="Add Town"
+        title={editDisplay ? "Edit Town" : "Add Town"}
         placement="right"
         closable={false}
         onClose={onClose}
@@ -339,7 +359,7 @@ const Town = () => {
         <div className='flex justify-end mt-2'>
           <FormButton
             onClick={handleAdd}
-            title='Add Town'
+            title={editDisplay ? "Update" : "Add Town"}
             style={{
               color: 'white',
               backgroundColor: 'blue'

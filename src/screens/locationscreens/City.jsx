@@ -96,7 +96,7 @@ const City = () => {
       CityId: editingCity,
       City: newCity,
     } : payload;
-    console.log('cehcking my payload', payloadToUse)
+
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
