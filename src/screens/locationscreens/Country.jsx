@@ -5,7 +5,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import { getData, initialData } from '../../services/mainApp.service';
 import BasicForm from '../../components/formcomponents/BasicForm'
-import { Drawer, Space, Button, Popconfirm } from 'antd'
+import { Drawer, Space, Button, Popconfirm, message } from 'antd'
 
 const Country = () => {
 
@@ -16,8 +16,15 @@ const Country = () => {
   const [sortedInfo, setSortedInfo] = useState({});
   const [filteredCountries, setFilteredCountries] = useState();   // State for filtered countries
   const [editingCountry, setEditingCountry] = useState(null); // State for the country being edited
+  const [messageApi, contextHolder] = message.useMessage();
 
-
+  const openMessage = (type, content) => {
+    messageApi.open({
+      type: type,
+      content: content,
+    });
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,6 +66,7 @@ const Country = () => {
     setVisible(true); // Open the drawer
   }
   const handleDelete = (record) => {
+  
     const payloadToUse = {
       ...payload,
       OperationId: 4, // Edit operation
@@ -69,7 +77,9 @@ const Country = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log("checking response...", data.DataSet.Table[0].Message)
+      
+          openMessage('success', 'Deleted Successfully!');
+        
         const updatedCountriesData = data.DataSet.Table1;
         setCountries(updatedCountriesData);
         setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
@@ -104,7 +114,6 @@ const Country = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log("checking response", data)
         const updatedCountriesData = data.DataSet.Table1;
         setCountries(updatedCountriesData);
         setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
@@ -225,6 +234,7 @@ const Country = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text">
+          {contextHolder}
             <EditTwoTone onClick={() => handleEdit(record)} />
           </Button>
           <Popconfirm

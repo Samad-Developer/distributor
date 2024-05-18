@@ -6,7 +6,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import { getData, initialData } from '../../services/mainApp.service'
 import BasicForm from '../../components/formcomponents/BasicForm'
-import { Drawer, Space, Button, Select } from 'antd'
+import { Drawer, Space, Button, Popconfirm } from 'antd'
 import { useDispatch } from 'react-redux'
 import { Fragment } from 'react'
 
@@ -29,12 +29,12 @@ const Province = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await initialData(); 
-        setCountriesData(response.DataSet.Table); 
+        const response = await initialData();
+        setCountriesData(response.DataSet.Table);
         setProvincesData(response.DataSet.Table1)
         setFilteredProvinces(response.DataSet.Table1)
       } catch (error) {
-        console.error('Error fetching data:', error); 
+        console.error('Error fetching data:', error);
       }
     };
     fetchData()
@@ -44,7 +44,7 @@ const Province = () => {
     "OperationId": 2,
     "Type": "province",
     "UserId": 1,
-    "CountryId": drawerSelectCountry,       
+    "CountryId": drawerSelectCountry,
     "ProvinceId": null,
     "CityId": null,
     "TownId": null,
@@ -70,7 +70,7 @@ const Province = () => {
     setSelectedCountry()
     setsearchProvince()
   }
-  
+
 
   const handleChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter);
@@ -91,7 +91,7 @@ const Province = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log("checking updated province",data)
+        console.log("checking updated province", data)
         const updatedProvinceData = data.DataSet.Table1
         setProvincesData(updatedProvinceData)
         setFilteredProvinces(updatedProvinceData)
@@ -108,7 +108,7 @@ const Province = () => {
   const onClose = () => {
     setVisible(false);
     setNewProvince('');
-    setEditingCountry(null); 
+    setEditingCountry(null);
     setEditingProvince(null);
     setDrawerSelectCountry()
   };
@@ -132,20 +132,20 @@ const Province = () => {
   const searchPanel = (
     <div className='flex'>
       <Fragment>
-      <FormSelect
-            options={countriesData}
-            name="Country"
-            label="Country"
-            value={selectedCountry}
-            style={{
-              width: '150px'
-            }}
-           
-            onChange={(event) => {
-              setSelectedCountry(event)
-            }}
-            filterOption={filterOption}
-          />
+        <FormSelect
+          options={countriesData}
+          name="Country"
+          label="Country"
+          value={selectedCountry}
+          style={{
+            width: '150px'
+          }}
+
+          onChange={(event) => {
+            setSelectedCountry(event)
+          }}
+          filterOption={filterOption}
+        />
         <FormTextField
           label='province'
           value={searchProvince}
@@ -228,17 +228,17 @@ const Province = () => {
   )
 
   const handleDelete = (record) => {
-    
+
     const payloadToUse = {
       ...payload,
-      OperationId: 4, 
+      OperationId: 4,
       CountryId: record.CountryId,
       ProvinceId: record.ProvinceId,
-    } ;
+    };
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log("checking updated province",data)
+        console.log("checking updated province", data)
         const updatedProvinceData = data.DataSet.Table1
         setProvincesData(updatedProvinceData)
         setFilteredProvinces(updatedProvinceData) // Update filteredCountries after adding or editing a country
@@ -272,28 +272,36 @@ const Province = () => {
           <Button type="text" onClick={() => handleEdit(record)}>
             <EditTwoTone />
           </Button>
-          <Button type="danger" onClick={() => handleDelete(record)}>
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this Province?"
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => handleDelete(record)}
+          >
+          <Button type="danger">
             <DeleteTwoTone />
           </Button>
-        </Space>
+        </Popconfirm>
+        </Space >
       ),
     },
   ];
 
-  return (
-    <div>
-      <BasicForm
-        searchPanel={searchPanel}
-        onOpen={onOpen}
-        onClose={onClose}
-        formDrawer={formDrawer}
-        columns={columns}
-        dataSource={filteredProvinces}
-        addTitle='New Province'
-        handleChange={handleChange}
-      />
-    </div>
-  )
+return (
+  <div>
+    <BasicForm
+      searchPanel={searchPanel}
+      onOpen={onOpen}
+      onClose={onClose}
+      formDrawer={formDrawer}
+      columns={columns}
+      dataSource={filteredProvinces}
+      addTitle='New Province'
+      handleChange={handleChange}
+    />
+  </div>
+)
 }
 
 export default Province

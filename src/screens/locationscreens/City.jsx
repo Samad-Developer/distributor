@@ -5,7 +5,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
-import { Drawer, Space, Button, Select } from 'antd'
+import { Drawer, Space, Button, Select, Popconfirm } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
 import { getData, initialData } from '../../services/mainApp.service'
@@ -328,9 +328,17 @@ const City = () => {
           <Button type="text" onClick={() => handleEdit(record)}>
             <EditTwoTone />
           </Button>
-          <Button type="danger" onClick={() => handleDelete(record)}>
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this City?"
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => handleDelete(record)}
+          >
+          <Button type="danger">
             <DeleteTwoTone />
           </Button>
+        </Popconfirm>
         </Space>
       ),
     },
