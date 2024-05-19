@@ -5,7 +5,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
-import { Drawer, Space, Button, Select, Popconfirm } from 'antd'
+import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
 import { getData, initialData } from '../../services/mainApp.service'
@@ -51,6 +51,14 @@ const City = () => {
     };
     fetchData()
   }, [])
+
+  const openMessage = (type, content) => {
+    // messageApi.open({
+    //   type: type,
+    //   content: content,
+    // });
+    message[type](content);
+  };
 
   const payload = {
     "OperationId": 2,
@@ -100,12 +108,17 @@ const City = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
+        if (data.Response) {
+        openMessage('success', data.DataSet.Table[0].Message || 'City added/updated successfully!');
         const updatedCitiesData = data.DataSet.Table1
         setCityData(updatedCitiesData)
         setFilteredCities(updatedCitiesData)
-        // setCountriesData()
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error adding/updating the City.');
+      }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error adding/updating the City.');
       }
     };
 
@@ -145,11 +158,18 @@ const City = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
+        if (data.Response) {
+        openMessage('success', data.DataSet.Table[0].Message || 'City Deleted successfully!');
         const updatedCitiesData = data.DataSet.Table1
         setCityData(updatedCitiesData)
         setFilteredCities(updatedCitiesData)
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error deleting the City.');
+      }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error deleting the City.');
+
       }
     };
 

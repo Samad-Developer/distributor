@@ -5,7 +5,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
-import { Drawer, Space, Button, Select, Popconfirm } from 'antd'
+import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
 import { getData, initialData } from '../../services/mainApp.service'
@@ -55,6 +55,14 @@ const Area = () => {
     };
     fetchData()
   }, [])
+
+  const openMessage = (type, content) => {
+    // messageApi.open({
+    //   type: type,
+    //   content: content,
+    // });
+    message[type](content);
+  };
 
   const payload = {
     "OperationId": 2,
@@ -131,11 +139,17 @@ const Area = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
+        if (data.Response) {
+        openMessage('success', data.DataSet.Table[0].Message || 'Area added/updated successfully!');
         const updatedAreaData = data.DataSet.Table1
         setAreaData(updatedAreaData)
         setFilteredAreaData(updatedAreaData)
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error adding/updating the Area.');
+      }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error adding/updating the Area.');
       }
     };
     fetchData();
@@ -152,6 +166,7 @@ const Area = () => {
     setDrawerSelectProvince()
     setDrawerSelectTown()
     setDrawerSelectCity()
+    setEditDisplay()
   };
 
   const onOpen = () => {
@@ -182,11 +197,17 @@ const Area = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Area deleted successfully!');
         const updatedAreaData = data.DataSet.Table1
         setAreaData(updatedAreaData)
         setFilteredAreaData(updatedAreaData)
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error deleting the Area.');
+      }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error deleting the Area.');
       }
     };
     fetchData();

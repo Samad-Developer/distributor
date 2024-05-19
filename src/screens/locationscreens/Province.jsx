@@ -6,7 +6,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import { getData, initialData } from '../../services/mainApp.service'
 import BasicForm from '../../components/formcomponents/BasicForm'
-import { Drawer, Space, Button, Popconfirm } from 'antd'
+import { Drawer, Space, Button, Popconfirm, message} from 'antd'
 import { useDispatch } from 'react-redux'
 import { Fragment } from 'react'
 
@@ -39,6 +39,14 @@ const Province = () => {
     };
     fetchData()
   }, [])
+  
+  const openMessage = (type, content) => {
+    // messageApi.open({
+    //   type: type,
+    //   content: content,
+    // });
+    message[type](content);
+  };
 
   const payload = {
     "OperationId": 2,
@@ -91,19 +99,50 @@ const Province = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log("checking updated province", data)
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Province added/updated successfully!');
         const updatedProvinceData = data.DataSet.Table1
         setProvincesData(updatedProvinceData)
         setFilteredProvinces(updatedProvinceData)
-        // setCountriesData()
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error adding/updating the province.');
+      }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error adding/updating the province.');
       }
     };
 
     fetchData();
     setEditingCountry(null)
   };
+
+  const handleDelete = (record) => {
+
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4,
+      CountryId: record.CountryId,
+      ProvinceId: record.ProvinceId,
+    };
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Province deleted successfully!');
+        const updatedProvinceData = data.DataSet.Table1
+        setProvincesData(updatedProvinceData)
+        setFilteredProvinces(updatedProvinceData)
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error deleting the province.');
+      }
+      } catch (error) {
+        console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error deleting the province.');
+      }
+    };
+    fetchData();
+  }
 
   const onClose = () => {
     setVisible(false);
@@ -227,27 +266,6 @@ const Province = () => {
     </div>
   )
 
-  const handleDelete = (record) => {
-
-    const payloadToUse = {
-      ...payload,
-      OperationId: 4,
-      CountryId: record.CountryId,
-      ProvinceId: record.ProvinceId,
-    };
-    const fetchData = async () => {
-      try {
-        const data = await getData(url, payloadToUse);
-        console.log("checking updated province", data)
-        const updatedProvinceData = data.DataSet.Table1
-        setProvincesData(updatedProvinceData)
-        setFilteredProvinces(updatedProvinceData) // Update filteredCountries after adding or editing a country
-      } catch (error) {
-        console.error('Error fetching location data:', error);
-      }
-    };
-    fetchData();
-  }
 
   const columns = [
     {

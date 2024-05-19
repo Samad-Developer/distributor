@@ -16,15 +16,15 @@ const Country = () => {
   const [sortedInfo, setSortedInfo] = useState({});
   const [filteredCountries, setFilteredCountries] = useState();   // State for filtered countries
   const [editingCountry, setEditingCountry] = useState(null); // State for the country being edited
-  const [messageApi, contextHolder] = message.useMessage();
-
+  // const [messageApi, contextHolder] = message.useMessage();
   const openMessage = (type, content) => {
-    messageApi.open({
-      type: type,
-      content: content,
-    });
+    // messageApi.open({
+    //   type: type,
+    //   content: content,
+    // });
+    message[type](content);
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -65,31 +65,51 @@ const Country = () => {
     setEditingCountry(record.CountryId); // Set the country being edited
     setVisible(true); // Open the drawer
   }
-  const handleDelete = (record) => {
-  
+  // const handleDelete = (record) => {
+  //   const payloadToUse = {
+  //     ...payload,
+  //     OperationId: 4, // Edit operation
+  //     CountryId: record.CountryId,
+  //     Country: null,
+  //   };
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = await getData(url, payloadToUse);
+  //       const updatedCountriesData = data.DataSet.Table1;
+  //       setCountries(updatedCountriesData);
+  //       setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
+  //     } catch (error) {
+  //       console.error('Error fetching location data:', error);
+  //     }
+  //   };
+  //   fetchData();
+  // }
+
+  const handleDelete = async (record) => {
     const payloadToUse = {
       ...payload,
-      OperationId: 4, // Edit operation
+      OperationId: 4, // Delete operation
       CountryId: record.CountryId,
       Country: null,
     };
 
-    const fetchData = async () => {
-      try {
-        const data = await getData(url, payloadToUse);
-      
-          openMessage('success', 'Deleted Successfully!');
-        
+    try {
+      const data = await getData(url, payloadToUse);
+      if (data.Response) {
+        openMessage('success', data.DataSet.Table[0].Message || 'Deleted successfully!');
+        console.log('after delte openMessage')
         const updatedCountriesData = data.DataSet.Table1;
         setCountries(updatedCountriesData);
-        setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
-      } catch (error) {
-        console.error('Error fetching location data:', error);
+        setFilteredCountries(updatedCountriesData);
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error deleting the country.');
       }
-    };
+    } catch (error) {
+      console.error('Error deleting country:', error);
+      openMessage('error', 'There was an error deleting the country.');
+    }
+  };
 
-    fetchData();
-  }
   const handleSearch = () => {
     if (!selectedCountry) {
       setFilteredCountries(countries); // Reset filter if no country is selected
@@ -103,7 +123,6 @@ const Country = () => {
   }
 
   const handleAdd = () => {
-
     const payloadToUse = editingCountry ? {
       ...payload,
       OperationId: 3, // Edit operation
@@ -112,13 +131,29 @@ const Country = () => {
     } : payload;
 
     const fetchData = async () => {
+      // try {
+      //   const data = await getData(url, payloadToUse);
+      //   const updatedCountriesData = data.DataSet.Table1;
+      //   setCountries(updatedCountriesData);
+      //   setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
+      // } catch (error) {
+      //   console.error('Error fetching location data:', error);
+      // }
       try {
         const data = await getData(url, payloadToUse);
-        const updatedCountriesData = data.DataSet.Table1;
-        setCountries(updatedCountriesData);
-        setFilteredCountries(updatedCountriesData); // Update filteredCountries after adding or editing a country
+        console.log('response', data);
+  
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Operation was successful!');
+          const updatedCountriesData = data.DataSet.Table1;
+          setCountries(updatedCountriesData);
+          setFilteredCountries(updatedCountriesData);
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error processing your request.');
+        }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error processing your request.');
       }
     };
 
@@ -234,7 +269,7 @@ const Country = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text">
-          {contextHolder}
+          {/* {contextHolder} */}
             <EditTwoTone onClick={() => handleEdit(record)} />
           </Button>
           <Popconfirm

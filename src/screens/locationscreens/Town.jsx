@@ -5,7 +5,7 @@ import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
-import { Drawer, Space, Button, Select, Popconfirm } from 'antd'
+import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
 import { getData, initialData } from '../../services/mainApp.service'
@@ -56,6 +56,14 @@ const Town = () => {
     };
     fetchData()
   }, [])
+
+  const openMessage = (type, content) => {
+    // messageApi.open({
+    //   type: type,
+    //   content: content,
+    // });
+    message[type](content);
+  };
 
   const payload = {
     "OperationId": 2,
@@ -113,13 +121,16 @@ const Town = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log('response', data)
-        const updatedTownData = data.DataSet.Table1
+        if (data.Response) {
+        openMessage('success', data.DataSet.Table[0].Message || 'Town added/updated successfully!');        const updatedTownData = data.DataSet.Table1
         setTownData(updatedTownData)
         setFilteredTownData(updatedTownData)
-        // setCountriesData()
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error adding/updating the Town.');
+      }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error adding/updating the Town.');
       }
     };
 
@@ -143,6 +154,7 @@ const Town = () => {
     setDrawerSelectCountry()
     setDrawerSelectProvince()
     setDrawerSelectCity()
+    setEditDisplay()
   };
 
   const onOpen = () => {
@@ -171,12 +183,17 @@ const Town = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
-        console.log('responnse', data)
+        if (data.Response) {
+        openMessage('success', data.DataSet.Table[0].Message || 'Town deleted successfully!')
         const updatedTownData = data.DataSet.Table1
         setTownData(updatedTownData)
         setFilteredTownData(updatedTownData)
+      } else {
+        openMessage('error', data.ResponseMessage || 'There was an error deleting the Town.');
+      }
       } catch (error) {
         console.error('Error fetching location data:', error);
+        openMessage('error', 'There was an error deleting the Town.');
       }
     }
 
