@@ -292,18 +292,9 @@ const Town = () => {
       <Drawer
         title={editDisplay ? "Edit Town" : "Add Town"}
         placement="right"
-        closable={false}
         onClose={onClose}
         open={visible}
         size='large'
-        extra={
-          <Space>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={onClose}>
-              OK
-            </Button>
-          </Space>
-        }
       >
         <div className='grid grid-cols-2 gap-4'>
           <div className='flex flex-col'>
@@ -449,7 +440,7 @@ const Town = () => {
         formDrawer={formDrawer}
         columns={columns}
         dataSource={filteredTownData}
-        addTitle='New Town'
+        addTitle='Create New Town'
         handleChange={handleChange}
       />
     </div>

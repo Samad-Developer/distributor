@@ -2,7 +2,6 @@ import { Divider, Table } from 'antd'
 import React from 'react'
 import FormButton from '../../components/generalcomponents/FormButton'
 
-
 const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, handleChange, onOpen, onClose }) => {
   return (
     <div>
@@ -12,6 +11,7 @@ const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, han
       <div className='flex justify-end'>
         <FormButton
           title={addTitle}
+          
           style={{
             backgroundColor: 'blue',
             color: 'white'

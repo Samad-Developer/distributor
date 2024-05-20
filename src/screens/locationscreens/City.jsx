@@ -243,18 +243,9 @@ const City = () => {
       <Drawer
         title={editDisplay ? "Edit City" : "Add City"}
         placement="right"
-        closable={false}
         onClose={onClose}
         open={visible}
         size='large'
-        extra={
-          <Space>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={onClose}>
-              OK
-            </Button>
-          </Space>
-        }
       >
         <div className='flex'>
           <FormSelect
@@ -373,7 +364,7 @@ const City = () => {
         formDrawer={formDrawer}
         columns={columns}
         dataSource={filteredCities}
-        addTitle='New City'
+        addTitle='Create New City'
         handleChange={handleChange}
       />
     </div>

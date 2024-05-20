@@ -213,18 +213,9 @@ const Province = () => {
       <Drawer
         title={editingProvince ? "Edit Province" : "Add Province"}
         placement="right"
-        closable={false}
         onClose={onClose}
         open={visible}
         size='large'
-        extra={
-          <Space>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={onClose}>
-              OK
-            </Button>
-          </Space>
-        }
       >
         <div className='flex'>
           <FormSelect
@@ -315,7 +306,7 @@ return (
       formDrawer={formDrawer}
       columns={columns}
       dataSource={filteredProvinces}
-      addTitle='New Province'
+      addTitle='Create New Province'
       handleChange={handleChange}
     />
   </div>

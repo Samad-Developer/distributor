@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
-import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
@@ -315,18 +315,9 @@ const Area = () => {
       <Drawer
         title={editDisplay ? "Edit Area" : "Add Area"}
         placement="right"
-        closable={false}
         onClose={onClose}
         open={visible}
         size='large'
-        extra={
-          <Space>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={onClose}>
-              OK
-            </Button>
-          </Space>
-        }
       >
         <div className='grid grid-cols-2 gap-2'>
           <div className='flex flex-col ml-2'>
@@ -497,7 +488,7 @@ const Area = () => {
         formDrawer={formDrawer}
         columns={columns}
         dataSource={filteredAreaData}
-        addTitle='New Area'
+        addTitle='Create New Area'
         handleChange={handleChange}
       />
     </div>

@@ -221,18 +221,8 @@ const Country = () => {
       <Drawer
         title={editingCountry ? "Edit Country" : "Add Country"}
         placement="right"
-        closable={false}
         onClose={onClose}
         open={visible}
-        extra={
-          <Space>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={handleAdd}>
-              {editingCountry ? "Update" : "OK"}
-            </Button>
-          </Space>
-        }
-        closeIcon={<CloseOutlined />}
       >
         <FormTextField
           label="Country"
@@ -298,7 +288,7 @@ const Country = () => {
         columns={columns}
         dataSource={filteredCountries}
         handleChange={handleChange}
-        addTitle='New Country'
+        addTitle='Create New Country'
       />
     </div>
 
