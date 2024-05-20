@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
-import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
@@ -288,7 +288,7 @@ const Province = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text" onClick={() => handleEdit(record)}>
-            <EditTwoTone />
+            <EditOutlined style={{color: 'green'}}/>
           </Button>
           <Popconfirm
             title="Delete the task"
@@ -298,7 +298,7 @@ const Province = () => {
             onConfirm={() => handleDelete(record)}
           >
           <Button type="danger">
-            <DeleteTwoTone />
+            <DeleteOutlined style={{color: 'red'}}/>
           </Button>
         </Popconfirm>
         </Space >

@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
-import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
@@ -470,7 +470,7 @@ const Area = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text" onClick={() => handleEdit(record)}>
-            <EditTwoTone />
+            <EditOutlined style={{color:"green"}}/>
           </Button>
           <Popconfirm
             title="Delete the task"
@@ -480,7 +480,7 @@ const Area = () => {
             onConfirm={() => handleDelete(record)}
           >
           <Button type="danger">
-            <DeleteTwoTone />
+            <DeleteOutlined style={{color:'red'}}/>
           </Button>
         </Popconfirm>
         </Space>

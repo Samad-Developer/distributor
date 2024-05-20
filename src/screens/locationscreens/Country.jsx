@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { CloseOutlined, EditTwoTone, DeleteTwoTone } from '@ant-design/icons';
+import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
@@ -270,7 +270,7 @@ const Country = () => {
         <Space size="small">
           <Button type="text">
           {/* {contextHolder} */}
-            <EditTwoTone onClick={() => handleEdit(record)} />
+            <EditOutlined onClick={() => handleEdit(record)} style={{color:'green'}}/>
           </Button>
           <Popconfirm
             title="Delete the task"
@@ -280,7 +280,7 @@ const Country = () => {
             onConfirm={() => handleDelete(record)}
           >
             <Button type="danger">
-              <DeleteTwoTone/>
+              <DeleteOutlined style={{color: 'red'}}/>
             </Button>
           </Popconfirm>
         </Space>
