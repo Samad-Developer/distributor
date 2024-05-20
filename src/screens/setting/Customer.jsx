@@ -30,66 +30,6 @@ const Customer = () => {
         isActive: true,
         creditDays: 30,
       },
-      {
-        key: '1',
-        customerName: 'John Doe',
-        contactPerson: 'Jane Smith',
-        contact1: '1234567890',
-        contact2: '0987654321',
-        area: 'Area 1',
-        address: '123 Street',
-        ntnNo: 'NTN123',
-        isActive: true,
-        creditDays: 30,
-      },
-      {
-        key: '1',
-        customerName: 'John Doe',
-        contactPerson: 'Jane Smith',
-        contact1: '1234567890',
-        contact2: '0987654321',
-        area: 'Area 1',
-        address: '123 Street',
-        ntnNo: 'NTN123',
-        isActive: true,
-        creditDays: 30,
-      },
-      {
-        key: '1',
-        customerName: 'John Doe',
-        contactPerson: 'Jane Smith',
-        contact1: '1234567890',
-        contact2: '0987654321',
-        area: 'Area 1',
-        address: '123 Street',
-        ntnNo: 'NTN123',
-        isActive: true,
-        creditDays: 30,
-      },
-      {
-        key: '1',
-        customerName: 'John Doe',
-        contactPerson: 'Jane Smith',
-        contact1: '1234567890',
-        contact2: '0987654321',
-        area: 'Area 1',
-        address: '123 Street',
-        ntnNo: 'NTN123',
-        isActive: true,
-        creditDays: 30,
-      },
-      {
-        key: '1',
-        customerName: 'John Doe',
-        contactPerson: 'Jane Smith',
-        contact1: '1234567890',
-        contact2: '0987654321',
-        area: 'Area 1',
-        address: '123 Street',
-        ntnNo: 'NTN123',
-        isActive: true,
-        creditDays: 30,
-      },
       // Add more dummy data as needed
     ];
     setCustomers(data);
@@ -112,11 +52,11 @@ const Customer = () => {
   };
 
   const onSearch = values => {
-    console.log('checking the seachf', values)
     const filteredData = customers.filter(customer => {
       return Object.keys(values).every(key => {
         if (!values[key]) return true;
         if (typeof customer[key] === 'string') {
+          console.log('checking the customer is it  array or object',customer[key])
           return customer[key].toLowerCase().includes(values[key].toLowerCase());
         }
         return customer[key] === values[key];
@@ -277,6 +217,7 @@ const Customer = () => {
           Create New Customer
         </Button>
       </div>
+
       <Table columns={columns} dataSource={filteredCustomers} pagination={{ pageSize: 5 }} />
 
       <Drawer

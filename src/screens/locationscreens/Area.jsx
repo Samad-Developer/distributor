@@ -244,6 +244,7 @@ const Area = () => {
               setselectedProvince(event)
             }}
             style={{ width: 150, marginLeft: '10px' }}
+            
           >
             {provincesData && provincesData
               // .filter((province) => province.CountryId === selectedCountry)
