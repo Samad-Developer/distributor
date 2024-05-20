@@ -100,7 +100,7 @@ const Province = () => {
       try {
         const data = await getData(url, payloadToUse);
         if (data.Response) {
-          openMessage('success', data.DataSet.Table[0].Message || 'Province added/updated successfully!');
+        openMessage('success', data.DataSet.Table[0].Message || 'Province added/updated successfully!');
         const updatedProvinceData = data.DataSet.Table1
         setProvincesData(updatedProvinceData)
         setFilteredProvinces(updatedProvinceData)

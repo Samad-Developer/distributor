@@ -250,7 +250,7 @@ const Town = () => {
           <p className='ml-3'>City</p>
           <Select
             value={selectedCity}
-            placeholder={'Select City'}
+            placeholder="Select City"
             style={{ width: 150, marginLeft: '10px' }}
             onChange={(value) => setSelectedCity(value)}
             
