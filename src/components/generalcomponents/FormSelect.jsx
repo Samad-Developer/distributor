@@ -10,7 +10,8 @@ const FormSelect = ({
   placeholder, 
   style, 
   value,
-  filterOption
+  filterOption,
+
 }) => {
   return (
     <div className='flex flex-col'>
@@ -30,6 +31,7 @@ const FormSelect = ({
         style={style}
         filterOption={filterOption}
         showSearch
+        
       />
     </div>
   );

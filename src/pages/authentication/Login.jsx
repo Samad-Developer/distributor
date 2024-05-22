@@ -88,6 +88,7 @@ const Login = () => {
             placeholder="Enter your username"
             value={username}
             onChange={setUsername}
+            size={"large"}
           />
           <FormTextField // Use InputText component for Password
             label="Password"
@@ -95,9 +96,10 @@ const Login = () => {
             type="password" // Set type to password for security
             value={password}
             onChange={setPassword}
+            size={"large"}
           />
           <Form.Item>
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-5 ">
               <Button type="primary" htmlType="submit" onClick={handleSubmit} disabled={loading}>
                 {loading ? 'Loading...' : 'Login'}
               </Button>

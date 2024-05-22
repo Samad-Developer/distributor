@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
-import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
@@ -216,6 +216,8 @@ const Town = () => {
             style={{
               width: '200px'
             }}
+            showSearch
+            optionFilterProp="children"
             placeholder="Select Country"
           >
             {countriesData && countriesData.map((country) => (
@@ -230,6 +232,8 @@ const Town = () => {
           <Select
             value={selectedProvince}
             placeholder="Select Province"
+            showSearch
+            optionFilterProp="children"
             onChange={(event) => {
               setselectedProvince(event)
             }}
@@ -253,7 +257,8 @@ const Town = () => {
             placeholder='Select City'
             style={{ width: 200, marginLeft: '10px' }}
             onChange={(value) => setSelectedCity(value)}
-            
+            showSearch
+            optionFilterProp="children"
           >
             {cityData && cityData
               // .filter((city) => city.ProvinceId === selectedProvince)
@@ -278,6 +283,7 @@ const Town = () => {
           onClick={handleSearch}
           type='text'
           title='Search'
+          icon={<SearchOutlined/>}
           style={{
             backgroundColor: 'blue',
             color: 'white',
@@ -296,18 +302,21 @@ const Town = () => {
         placement="right"
         onClose={onClose}
         open={visible}
-        size='large'
+        width={360}
       >
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='flex flex-col'>
           <div className='flex flex-col'>
-            <p>Country</p>
+            <p className='pb-1'>Country</p>
             <Select
               value={drawerSelectCountry}
               onChange={(event) => {
                 setDrawerSelectCountry(event)
               }}
+              showSearch
+              optionFilterProp="children"
               style={{
-                width: '200px'
+                width: '310px',
+                marginBottom: '20px'
               }}
               placeholder="Select Country"
             >
@@ -319,15 +328,17 @@ const Town = () => {
             </Select>
           </div>
           <div className='flex flex-col'>
-            <p>Province</p>
+            <p className='pb-1'>Province</p>
             <Select
               value={drawerSelectProvince}
               placeholder="Select Province"
               disabled={!drawerSelectCountry} // Disable province selection until a country is selected
+              showSearch
+              optionFilterProp="children"
               onChange={(event) => {
                 setDrawerSelectProvince(event)
               }}
-              style={{ width: '200px'}}
+              style={{ width: '310px', marginBottom: '20px'}}
             >
               {provincesData && provincesData
                 .filter((province) => province.CountryId === drawerSelectCountry)
@@ -339,13 +350,15 @@ const Town = () => {
             </Select>
           </div>
           <div className='flex flex-col'>
-            <p className='ml-3'>City</p>
+            <p className='pb-1'>City</p>
             <Select
               value={drawerSelectCity}
               placeholder={'Select City'}
-              style={{ width: '200px' }}
+              style={{ width: '310px', marginBottom: '20px' }}
               onChange={(value) => setDrawerSelectCity(value)}
               disabled={!drawerSelectProvince}
+              showSearch
+              optionFilterProp="children"
             >
               {cityData && cityData
                 .filter((city) => city.ProvinceId === drawerSelectProvince)
@@ -361,7 +374,8 @@ const Town = () => {
             value={newTown}
             onChange={setnewTown}
             style={{
-              width: '200px'
+              width: '310px',
+              marginBottom: '20px'
             }}
           />
 
@@ -372,7 +386,8 @@ const Town = () => {
             title={editDisplay ? "Update" : "Add Town"}
             style={{
               color: 'white',
-              backgroundColor: 'blue'
+              backgroundColor: 'blue',
+              width: '310px'
             }}
           />
         </div>

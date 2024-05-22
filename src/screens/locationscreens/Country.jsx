@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
-import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { CloseOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
@@ -203,6 +203,7 @@ const Country = () => {
               onClick={handleSearch}
               type='text'
               title='Search'
+              icon={<SearchOutlined/>}
               style={{
                 backgroundColor: 'blue',
                 color: 'white',

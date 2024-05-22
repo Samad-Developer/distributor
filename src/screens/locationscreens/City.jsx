@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
-import { CloseOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { CloseOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
@@ -229,6 +229,7 @@ const City = () => {
           onClick={handleSearch}
           type='text'
           title='Search'
+          icon={<SearchOutlined/>}
           style={{
             backgroundColor: 'blue',
             color: 'white',
@@ -247,9 +248,9 @@ const City = () => {
         placement="right"
         onClose={onClose}
         open={visible}
-        size='large'
+        width={360}
       >
-        <div className='flex'>
+        <div className='flex flex-col'>
           <FormSelect
             options={countriesData}
             name="Country"
@@ -257,23 +258,25 @@ const City = () => {
             value={drawerSelectCountry}
             filterOption={filterOption}
             style={{
-              width: '150px'
+              width: '310px'
             }}
             onChange={(event) => {
               setDrawerSelectCountry(event)
               
             }}
+            
           />
-          <div className='flex flex-col'>
-            <p className='ml-3'>Province</p>
+          <div className='flex flex-col mt-4'>
+            <p className='pb-1'>Province</p>
             <Select
               value={drawerSelectProvince}
               placeholder={'Select Province'}
               label='select'
-              style={{ width: 150, marginLeft: '10px' }}
+              style={{ width: 310 }}
               onChange={(event) => {
                 setDrawerSelectProvince(event)
               }}
+              
               showSearch
               filterOption={filterOption}
               disabled={!drawerSelectCountry}
@@ -292,8 +295,8 @@ const City = () => {
             value={newCity}
             onChange={setnewCity}
             style={{
-              width: '200px',
-              marginLeft: '10px'
+              width: '310px',
+              marginTop: '20px'
             }}
           />
         </div>
@@ -303,7 +306,8 @@ const City = () => {
             title={editDisplay ? "Update" : "Add City"}
             style={{
               color: 'white',
-              backgroundColor: 'blue'
+              backgroundColor: 'blue',
+              marginTop: '20px'
             }}
           />
         </div>

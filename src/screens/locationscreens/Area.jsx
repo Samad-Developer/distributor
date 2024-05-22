@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
@@ -220,6 +220,8 @@ const Area = () => {
           <p className='pb-1'>Country</p>
           <Select
             value={selectedCountry}
+            showSearch
+            optionFilterProp="children"
             onChange={(event) => {
               setSelectedCountry(event)
             }}
@@ -239,6 +241,8 @@ const Area = () => {
           <p className='pb-1 mr'>Province</p>
           <Select
             value={selectedProvince}
+            showSearch
+            optionFilterProp="children"
             placeholder="Select Province"
             onChange={(event) => {
               setselectedProvince(event)
@@ -260,6 +264,8 @@ const Area = () => {
           <Select
             value={selectedCity}
             placeholder='Select City'
+            showSearch
+            optionFilterProp="children"
             style={{ width: 150, marginLeft: '10px' }}
             onChange={(value) => setSelectedCity(value)}
           >
@@ -277,6 +283,8 @@ const Area = () => {
           <Select
             value={selectedTown}
             placeholder={'Select Town'}
+            showSearch
+            optionFilterProp="children"
             style={{ width: 150, marginLeft: '10px' }}
             onChange={(value) => setSelectedTown(value)}
           >
@@ -300,6 +308,7 @@ const Area = () => {
           onClick={handleSearch}
           type='text'
           title='Search'
+          icon={<SearchOutlined/>}
           style={{
             backgroundColor: 'blue',
             color: 'white',
@@ -322,14 +331,16 @@ const Area = () => {
       >
         <div className='grid grid-cols-2 gap-2'>
           <div className='flex flex-col ml-2'>
-            <p>Country</p>
+            <p className='pb-1'>Country</p>
             <Select
               value={drawerSelectCountry}
+              showSearch
+              optionFilterProp="children"
               onChange={(event) => {
                 setDrawerSelectCountry(event)
               }}
               style={{
-                width: '200px'
+                width: '310px'
               }}
               placeholder="Select Country"
             >
@@ -341,15 +352,17 @@ const Area = () => {
             </Select>
           </div>
           <div className='flex flex-col'>
-            <p className='ml-2'>Province</p>
+            <p className='ml-2 pb-1'>Province</p>
             <Select
               value={drawerSelectProvince}
               placeholder="Select Province"
               disabled={!drawerSelectCountry}
+              showSearch
+              optionFilterProp="children"
               onChange={(event) => {
                 setDrawerSelectProvince(event)
               }}
-              style={{ width: 200, marginLeft: '10px' }}
+              style={{ width: 310, marginLeft: '10px' }}
             >
               {provincesData && provincesData
                 .filter((province) => province.CountryId === drawerSelectCountry)
@@ -361,13 +374,15 @@ const Area = () => {
             </Select>
           </div>
           <div className='flex flex-col'>
-            <p className='ml-3'>City</p>
+            <p className='ml-3 pb-1'>City</p>
             <Select
               value={drawerSelectCity}
               placeholder={'Select City'}
-              style={{ width: 200, marginLeft: '10px' }}
+              style={{ width: 310, marginLeft: '10px' }}
               onChange={(value) => setDrawerSelectCity(value)}
               disabled={!drawerSelectProvince}
+              showSearch
+              optionFilterProp="children"
             >
               {cityData && cityData
                 .filter((city) => city.ProvinceId === drawerSelectProvince)
@@ -379,13 +394,15 @@ const Area = () => {
             </Select>
           </div>
           <div className='flex flex-col'>
-            <p className='ml-3'>Town</p>
+            <p className='ml-3 pb-1'>Town</p>
             <Select
               value={drawerSelectTown}
               placeholder={'Select Town'}
-              style={{ width: 200, marginLeft: '10px' }}
+              style={{ width: 310, marginLeft: '10px' }}
               onChange={(value) => setDrawerSelectTown(value)}
               disabled={!drawerSelectCity}
+              showSearch
+              optionFilterProp="children"
             >
               {townData && townData
               .filter((town) => town.CityId === drawerSelectCity)
@@ -402,17 +419,18 @@ const Area = () => {
             onChange={setnewArea}
             style={{
               marginLeft: '10px',
-              width: '200px'
+              width: '310px'
             }}
           />
         </div>
-        <div className='flex justify-end mt-2'>
+        <div className=' mt-6 ml-2'>
           <FormButton
             onClick={handleAdd}
             title={editDisplay ? "Edit Area" : "Add Area"}
             style={{
               color: 'white',
-              backgroundColor: 'blue'
+              backgroundColor: 'blue',
+              width: '660px'
             }}
           />
         </div>

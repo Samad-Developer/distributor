@@ -13,6 +13,7 @@ const FormTextField = ({
   onBlur,
   style,
   borderColor,
+  size
 }) => {
 
   const handleChange = (event) => {
@@ -23,14 +24,14 @@ const FormTextField = ({
     <div className='flex flex-col' style={style}>
       <p className='pb-1'>{label}</p>
       <Input
-        size="middle" // Adjust size as needed (options include 'large', 'middle', and 'small')
+        size={size} // Adjust size as needed (options include 'large', 'middle', and 'small')
         placeholder={placeholder}
         type={type}
         value={value}
         onChange={handleChange}
         onBlur={onBlur}
         disabled={disabled}
-     
+        
       />
    
     </div>

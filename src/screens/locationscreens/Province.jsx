@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
-import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { CloseOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import FormTextField from '../../components/generalcomponents/FormTextField'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
@@ -200,6 +200,7 @@ const Province = () => {
           onClick={handleSearch}
           type='text'
           title='Search'
+          icon={<SearchOutlined/>}
           style={{
             backgroundColor: 'blue',
             color: 'white',
@@ -218,16 +219,16 @@ const Province = () => {
         placement="right"
         onClose={onClose}
         open={visible}
-        size='large'
+        width={360}
       >
-        <div className='flex'>
+        <div className='flex flex-col'>
           <FormSelect
             options={countriesData}
             name="Country"
             label="Country"
             value={drawerSelectCountry}
             style={{
-              width: '150px'
+              width: '310px'
             }}
             filterOption={filterOption}
             onChange={(event) => {
@@ -241,8 +242,8 @@ const Province = () => {
             value={newProvince}
             onChange={setNewProvince}
             style={{
-              width: '200px',
-              marginLeft: '10px'
+              width: '310px',
+              marginTop: '20px' 
             }}
           />
         </div>
@@ -252,7 +253,8 @@ const Province = () => {
             title={editingProvince ? "Update" : "Add Province"}
             style={{
               color: 'white',
-              backgroundColor: 'blue'
+              backgroundColor: 'blue',
+              marginTop: '20px'
             }}
           />
         </div>

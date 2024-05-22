@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Drawer, Form, Input, Select, Table, Space, Popconfirm, message, Row, Col } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -76,9 +76,9 @@ const Category = () => {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
-        <Space size="middle">
+        <Space size="large">
           <EditOutlined onClick={() => showDrawer(record)} style={{ cursor: 'pointer', color: 'blue' }} />
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+          <Popconfirm title="Are you sure to delete this Category ?" onConfirm={() => handleDelete(record.id)}>
             <DeleteOutlined style={{ cursor: 'pointer', color: 'red' }} />
           </Popconfirm>
         </Space>
@@ -105,7 +105,7 @@ const Category = () => {
           </Col>
           <Col span={6} style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
             <Form.Item>
-              <Button type="primary" htmlType="submit">Search</Button>
+              <Button type="primary" htmlType="submit" icon={<SearchOutlined/>}>Search</Button>
             </Form.Item>
             <Form.Item style={{ marginLeft: '10px' }}>
               <Button type="default" onClick={() => {

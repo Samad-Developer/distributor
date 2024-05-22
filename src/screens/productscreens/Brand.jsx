@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Drawer, Form, Input, Select, Table, Space, Popconfirm, message, Row, Col } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -84,9 +84,9 @@ const Brand = () => {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
-        <Space size="middle">
+        <Space size="large">
           <EditOutlined onClick={() => showDrawer(record)} style={{ cursor: 'pointer', color: 'blue' }} />
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+          <Popconfirm title="Are you sure to delete this Brand ?" onConfirm={() => handleDelete(record.id)}>
             <DeleteOutlined style={{ cursor: 'pointer', color: 'red' }} />
           </Popconfirm>
         </Space>
@@ -100,7 +100,7 @@ const Brand = () => {
         <Row gutter={16}>
           <Col span={6}>
             <Form.Item name="vendorName" label="Vendor">
-              <Select placeholder="Select Vendor">
+              <Select placeholder="Select Vendor" showSearch optionFilterProp="children">
                 <Option value="Vendor 1">Vendor 1</Option>
                 <Option value="Vendor 2">Vendor 2</Option>
               </Select>
@@ -113,7 +113,7 @@ const Brand = () => {
           </Col>
           <Col>
             <Form.Item>
-              <Button type="primary" htmlType="submit" style={{ marginTop: '30px' }}>Search</Button>
+              <Button type="primary" icon={<SearchOutlined/>} htmlType="submit" style={{ marginTop: '30px' }}>Search</Button>
             </Form.Item>
           </Col>
           <Col >
