@@ -207,14 +207,14 @@ const Town = () => {
     <div className='flex'>
       <Fragment>
         <div className='flex flex-col'>
-          <p>Country</p>
+          <p className='pb-1'>Country</p>
           <Select
             value={selectedCountry}
             onChange={(event) => {
               setSelectedCountry(event)
             }}
             style={{
-              width: '150px'
+              width: '200px'
             }}
             placeholder="Select Country"
           >
@@ -226,14 +226,14 @@ const Town = () => {
           </Select>
         </div>
         <div className='flex flex-col'>
-          <p>Province</p>
+          <p className='pb-1 ml-3'>Province</p>
           <Select
             value={selectedProvince}
             placeholder="Select Province"
             onChange={(event) => {
               setselectedProvince(event)
             }}
-            style={{ width: 150, marginLeft: '10px' }}
+            style={{ width: 200, marginLeft: '10px' }}
           >
             {provincesData && provincesData
               // .filter((province) => province.CountryId === selectedCountry)
@@ -247,11 +247,11 @@ const Town = () => {
 
 
         <div className='flex flex-col'>
-          <p className='ml-3'>City</p>
+          <p className='ml-3 pb-1'>City</p>
           <Select
             value={selectedCity}
-            placeholder="Select City"
-            style={{ width: 150, marginLeft: '10px' }}
+            placeholder='Select City'
+            style={{ width: 200, marginLeft: '10px' }}
             onChange={(value) => setSelectedCity(value)}
             
           >
@@ -267,9 +267,11 @@ const Town = () => {
         <FormTextField
           label='Town'
           value={searchTown}
+          placeholder={'Enter Town Name'}
           onChange={setsearchTown}
           style={{
-            marginLeft: '10px'
+            marginLeft: '10px',
+            width: '200px'
           }}
         />
         <FormButton
@@ -280,7 +282,7 @@ const Town = () => {
             backgroundColor: 'blue',
             color: 'white',
             marginLeft: '20px',
-            marginTop: '22px'
+            marginTop: '26px'
           }}
         />
       </Fragment>
@@ -413,7 +415,7 @@ const Town = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text" onClick={() => handleEdit(record)}>
-            <EditOutlined style={{color:'green'}}/>
+            <EditOutlined style={{color:'blue'}}/>
           </Button>
           <Popconfirm
             title="Delete the task"

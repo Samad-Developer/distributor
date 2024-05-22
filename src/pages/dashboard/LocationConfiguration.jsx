@@ -5,49 +5,36 @@ import Province from '../../screens/locationscreens/Province';
 import City from '../../screens/locationscreens/City'
 import Town from '../../screens/locationscreens/Town'
 import Area from '../../screens/locationscreens/Area'
-// import { getData } from '../../services/mainApp.service';
-// import { fetchLocationSuccess } from '../../store/reducers/locationSlice';
-// import { useDispatch } from 'react-redux';
+
 
 const onChange = (event) => {
   console.log("tabs are checkng now", event);
 };
 
+const { TabPane } = Tabs;
 
 const LocationConfiguration = () => {
   
   return (
-    <Tabs
-      defaultActiveKey="1"
-      onChange={(event) => onChange(event)}
-      items={[
-        {
-          label: `Country`,
-          key: '1',
-          children: <Country />,
-        },
-        {
-          label: `Province`,
-          key: '2',
-          children: <Province />,
-        },
-        {
-          label: `City`,
-          key: '3',
-          children: <City />,
-        },
-        {
-          label: `Town`,
-          key: '4',
-          children: <Town />,
-        },
-        {
-          label: `Area`,
-          key: '5',
-          children: <Area />,
-        }
-      ]}
-    />
+    <div style={{ padding: '20px' }}>
+    <Tabs defaultActiveKey="1">
+      <TabPane tab="Country" key="1">
+        <Country />
+      </TabPane>
+      <TabPane tab="Province" key="2">
+        <Province />
+      </TabPane>
+      <TabPane tab="City" key="3">
+        <City />
+      </TabPane>
+      <TabPane tab="Town" key="4">
+        <Town />
+      </TabPane>
+      <TabPane tab="Area" key="5">
+        <Area />
+      </TabPane>
+    </Tabs>
+  </div>
   );
 }
 export default LocationConfiguration;

@@ -179,7 +179,7 @@ const Country = () => {
 
   // searchPanel for Seaching Data
   const searchPanel = (
-    <div className='flex'>
+    <div className='flex mb-5'>
       <Fragment>
         <div className='flex'>
           <div>
@@ -187,9 +187,10 @@ const Country = () => {
               options={countries}
               name="Country"
               label="Country"
+              placeholder={'Select Country'}
               value={selectedCountry}
               style={{
-                width: '150px'
+                width: '250px'
               }}
               onChange={(event) => {
                 setselectedCountry(event)
@@ -206,7 +207,7 @@ const Country = () => {
                 backgroundColor: 'blue',
                 color: 'white',
                 marginLeft: '10px',
-                marginTop: '22px'
+                marginTop: '26px'
               }}
             />
           </div>
@@ -260,7 +261,7 @@ const Country = () => {
         <Space size="small">
           <Button type="text">
           {/* {contextHolder} */}
-            <EditOutlined onClick={() => handleEdit(record)} style={{color:'green'}}/>
+            <EditOutlined onClick={() => handleEdit(record)} style={{color:'blue'}}/>
           </Button>
           <Popconfirm
             title="Delete the task"

@@ -21,7 +21,7 @@ const FormTextField = ({
 
   return (
     <div className='flex flex-col' style={style}>
-      <p>{label}</p>
+      <p className='pb-1'>{label}</p>
       <Input
         size="middle" // Adjust size as needed (options include 'large', 'middle', and 'small')
         placeholder={placeholder}

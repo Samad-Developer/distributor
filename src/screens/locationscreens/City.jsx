@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import FormSelect from '../../components/generalcomponents/FormSelect'
 import FormButton from '../../components/generalcomponents/FormButton'
 import FormTextField from '../../components/generalcomponents/FormTextField'
-import { CloseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
+import { CloseOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'; // Import CloseOutlined icon from Ant Design
 import { Drawer, Space, Button, Select, Popconfirm, message } from 'antd'
 import { fetchUpdatedLocationSuccess } from '../../store/reducers/UpdatedLocationSlice'
 import { useDispatch } from 'react-redux'
@@ -188,7 +188,7 @@ const City = () => {
           label="Country"
           value={selectedCountry}
           style={{
-            width: '150px'
+            width: '220px'
           }}
           onChange={(event) => {
             setSelectedCountry(event)
@@ -196,13 +196,13 @@ const City = () => {
           filterOption={filterOption}
         />
         <div className='flex flex-col'>
-          <p className='ml-3'>Province</p>
+          <p className='ml-3 pb-1'>Province</p>
           <Select
             value={selectedProvince}
             placeholder={'Select Province'}
             label='Province'
             name='Province'
-            style={{ width: 150, marginLeft: '10px' }}
+            style={{ width: '220px', marginLeft: '10px' }}
             filterOption={filterOption}
             showSearch
             onChange={(event) => {
@@ -218,9 +218,11 @@ const City = () => {
         <FormTextField
           label='City'
           value={searchCity}
+          placeholder={'Enter City Name'}
           onChange={setsearchCity}
           style={{
-            marginLeft: '10px'
+            marginLeft: '10px',
+            width: '220px'
           }}
         />
         <FormButton
@@ -231,7 +233,7 @@ const City = () => {
             backgroundColor: 'blue',
             color: 'white',
             marginLeft: '20px',
-            marginTop: '22px'
+            marginTop: '26px'
           }}
         />
       </Fragment>
@@ -337,7 +339,7 @@ const City = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text" onClick={() => handleEdit(record)}>
-            <EditOutlined style={{color:'green'}}/>
+            <EditOutlined style={{color:'blue'}}/>
           </Button>
           <Popconfirm
             title="Delete the task"

@@ -6,6 +6,7 @@ import LocationConfiguration from '../pages/dashboard/LocationConfiguration';
 import Customer from '../screens/setting/Customer';
 import Company from '../screens/setting/Company';
 import Branch from '../screens/setting/Branch';
+import ProductConfiguration from '../pages/dashboard/ProductConfiguration';
 
 const MyRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const MyRoutes = () => {
           <Route path='branch' element={<Branch />}/>
           <Route path='company' element={<Company />}/>
           <Route path='SetupLocationConfig' element={<LocationConfiguration />}/>
+          <Route path='SetupProductConfig' element={<ProductConfiguration />}/>
         </Route>
         {/* Add any other routes here */}
       </Routes>

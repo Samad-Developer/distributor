@@ -5,7 +5,7 @@ import FormButton from '../../components/generalcomponents/FormButton'
 const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, handleChange, onOpen, onClose }) => {
   return (
     <div>
-      <div className='mt-2'>
+      <div className='mt-2 pb-10'>
         {searchPanel}
       </div>
       <div className='flex justify-end'>
@@ -14,7 +14,8 @@ const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, han
           
           style={{
             backgroundColor: 'blue',
-            color: 'white'
+            color: 'white',
+            marginBottom: '20px'
           }}
           onClick={onOpen}
         />

@@ -14,7 +14,7 @@ const FormSelect = ({
 }) => {
   return (
     <div className='flex flex-col'>
-      {label && <label htmlFor={label} className=' text-gray-700 mr-2'>{`${label} : `}</label>}
+      {label && <label htmlFor={label} className=' text-gray-700 mr-2 pb-1'>{`${label}`}</label>}
       <Select
         id={label}
         value={value}

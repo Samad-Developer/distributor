@@ -175,9 +175,10 @@ const Province = () => {
           options={countriesData}
           name="Country"
           label="Country"
+          placeholder={'Select Country'}
           value={selectedCountry}
           style={{
-            width: '150px'
+            width: '250px'
           }}
 
           onChange={(event) => {
@@ -186,11 +187,13 @@ const Province = () => {
           filterOption={filterOption}
         />
         <FormTextField
-          label='province'
+          label='Province'
           value={searchProvince}
+          placeholder={'Enter Province Name'}
           onChange={setsearchProvince}
           style={{
-            marginLeft: '10px'
+            marginLeft: '10px',
+            width: '250px'
           }}
         />
         <FormButton
@@ -201,7 +204,7 @@ const Province = () => {
             backgroundColor: 'blue',
             color: 'white',
             marginLeft: '20px',
-            marginTop: '22px'
+            marginTop: '26px'
           }}
         />
       </Fragment>
@@ -279,7 +282,7 @@ const Province = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text" onClick={() => handleEdit(record)}>
-            <EditOutlined style={{color: 'green'}}/>
+            <EditOutlined style={{color: 'blue'}}/>
           </Button>
           <Popconfirm
             title="Delete the task"

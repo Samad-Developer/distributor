@@ -217,7 +217,7 @@ const Area = () => {
     <div className='flex'>
       <Fragment>
         <div className='flex flex-col'>
-          <p>Country</p>
+          <p className='pb-1'>Country</p>
           <Select
             value={selectedCountry}
             onChange={(event) => {
@@ -236,7 +236,7 @@ const Area = () => {
           </Select>
         </div>
         <div className='flex flex-col'>
-          <p>Province</p>
+          <p className='pb-1 mr'>Province</p>
           <Select
             value={selectedProvince}
             placeholder="Select Province"
@@ -256,10 +256,10 @@ const Area = () => {
           </Select>
         </div>
         <div className='flex flex-col'>
-          <p className='ml-3'>City</p>
+          <p className='ml-3 pb-1'>City</p>
           <Select
             value={selectedCity}
-            placeholder={'Select City'}
+            placeholder='Select City'
             style={{ width: 150, marginLeft: '10px' }}
             onChange={(value) => setSelectedCity(value)}
           >
@@ -273,7 +273,7 @@ const Area = () => {
           </Select>
         </div>
         <div className='flex flex-col'>
-          <p className='ml-3'>Town</p>
+          <p className='ml-3 pb-1'>Town</p>
           <Select
             value={selectedTown}
             placeholder={'Select Town'}
@@ -290,6 +290,7 @@ const Area = () => {
         <FormTextField
           label='Area'
           value={searchArea}
+          placeholder={'Enter Area Name'}
           onChange={setsearchArea}
           style={{
             marginLeft: '10px'
@@ -303,7 +304,7 @@ const Area = () => {
             backgroundColor: 'blue',
             color: 'white',
             marginLeft: '20px',
-            marginTop: '22px'
+            marginTop: '26px'
           }}
         />
       </Fragment>
@@ -461,7 +462,7 @@ const Area = () => {
       render: (record) => (
         <Space size="small">
           <Button type="text" onClick={() => handleEdit(record)}>
-            <EditOutlined style={{color:"green"}}/>
+            <EditOutlined style={{color:"blue"}}/>
           </Button>
           <Popconfirm
             title="Delete the task"
