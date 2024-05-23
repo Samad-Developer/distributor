@@ -132,18 +132,14 @@ const Branch = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" icon={<EditOutlined />} onClick={() => onEditCompany(record)}>
-
-          </Button>
+           <Button icon={<EditOutlined />} onClick={() => onEditCompany(record)} />
           <Popconfirm
             title="Are you sure to delete this Branch?"
             onConfirm={() => onDeleteCompany(record)}
             okText="Yes"
             cancelText="No"
           >
-            <Button type="link" icon={<DeleteOutlined />} danger>
-
-            </Button>
+          <Button icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       ),

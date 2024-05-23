@@ -109,13 +109,13 @@ const City = () => {
       try {
         const data = await getData(url, payloadToUse);
         if (data.Response) {
-        openMessage('success', data.DataSet.Table[0].Message || 'City added/updated successfully!');
-        const updatedCitiesData = data.DataSet.Table1
-        setCityData(updatedCitiesData)
-        setFilteredCities(updatedCitiesData)
-      } else {
-        openMessage('error', data.ResponseMessage || 'There was an error adding/updating the City.');
-      }
+          openMessage('success', data.DataSet.Table[0].Message || 'City added/updated successfully!');
+          const updatedCitiesData = data.DataSet.Table1
+          setCityData(updatedCitiesData)
+          setFilteredCities(updatedCitiesData)
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error adding/updating the City.');
+        }
       } catch (error) {
         console.error('Error fetching location data:', error);
         openMessage('error', 'There was an error adding/updating the City.');
@@ -154,18 +154,18 @@ const City = () => {
       CountryId: record.CountryId,
       ProvinceId: record.ProvinceId,
       CityId: record.CityId
-    } ;
+    };
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
         if (data.Response) {
-        openMessage('success', data.DataSet.Table[0].Message || 'City Deleted successfully!');
-        const updatedCitiesData = data.DataSet.Table1
-        setCityData(updatedCitiesData)
-        setFilteredCities(updatedCitiesData)
-      } else {
-        openMessage('error', data.ResponseMessage || 'There was an error deleting the City.');
-      }
+          openMessage('success', data.DataSet.Table[0].Message || 'City Deleted successfully!');
+          const updatedCitiesData = data.DataSet.Table1
+          setCityData(updatedCitiesData)
+          setFilteredCities(updatedCitiesData)
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error deleting the City.');
+        }
       } catch (error) {
         console.error('Error fetching location data:', error);
         openMessage('error', 'There was an error deleting the City.');
@@ -229,7 +229,7 @@ const City = () => {
           onClick={handleSearch}
           type='text'
           title='Search'
-          icon={<SearchOutlined/>}
+          icon={<SearchOutlined />}
           style={{
             backgroundColor: 'blue',
             color: 'white',
@@ -262,9 +262,9 @@ const City = () => {
             }}
             onChange={(event) => {
               setDrawerSelectCountry(event)
-              
+
             }}
-            
+
           />
           <div className='flex flex-col mt-4'>
             <p className='pb-1'>Province</p>
@@ -276,17 +276,17 @@ const City = () => {
               onChange={(event) => {
                 setDrawerSelectProvince(event)
               }}
-              
+
               showSearch
               filterOption={filterOption}
               disabled={!drawerSelectCountry}
               options={provincesData && provincesData
                 .filter((province) => province.CountryId === drawerSelectCountry)
                 .map((option) => ({
-                value: option.ProvinceId,
-                label: option.Province,
-                key: `${option.Province}-${option.ProvinceId}`,
-              }))}
+                  value: option.ProvinceId,
+                  label: option.Province,
+                  key: `${option.Province}-${option.ProvinceId}`,
+                }))}
             />
           </div>
           <FormTextField
@@ -341,10 +341,8 @@ const City = () => {
       title: 'Action',
       key: 'action',
       render: (record) => (
-        <Space size="small">
-          <Button type="text" onClick={() => handleEdit(record)}>
-            <EditOutlined style={{color:'blue'}}/>
-          </Button>
+        <Space >
+          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this City?"
@@ -352,10 +350,8 @@ const City = () => {
             cancelText="No"
             onConfirm={() => handleDelete(record)}
           >
-          <Button type="danger">
-            <DeleteOutlined style={{color:'red'}}/>
-          </Button>
-        </Popconfirm>
+            <Button icon={<DeleteOutlined />} />
+          </Popconfirm>
         </Space>
       ),
     },

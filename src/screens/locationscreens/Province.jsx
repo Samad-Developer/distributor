@@ -282,10 +282,8 @@ const Province = () => {
       title: 'Action',
       key: 'action',
       render: (record) => (
-        <Space size="small">
-          <Button type="text" onClick={() => handleEdit(record)}>
-            <EditOutlined style={{color: 'blue'}}/>
-          </Button>
+        <Space >
+          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this Province?"
@@ -293,9 +291,7 @@ const Province = () => {
             cancelText="No"
             onConfirm={() => handleDelete(record)}
           >
-          <Button type="danger">
-            <DeleteOutlined style={{color: 'red'}}/>
-          </Button>
+          <Button icon={<DeleteOutlined />} />
         </Popconfirm>
         </Space >
       ),

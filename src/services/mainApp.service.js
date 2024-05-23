@@ -77,3 +77,65 @@ export const login = async (username, password) => {
     }
   };
   
+
+
+  export const initialCustomer = async () => {
+  
+    try {
+      const customerPayload = {
+        "OperationId": 1,
+        "CustomerId ": null,
+        "CustomerName": null,
+        "ContactPerson": null,
+        "Contact1": null,
+        "Contact2": null,
+        "Address ": null,
+        "AreaId": null,
+        "NTN": null,
+        "UserId": 1,
+        "UserIP": null,
+        "CreditDaysCount": null
+      }
+      const response = await axios.post('SetupCustomer', customerPayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };
+
+
+  export const initialCompany = async () => {
+  
+    try {
+      const companyPayload = {
+        "OperationId": 1,
+        "CompanyId": null,
+        "CompanyName": null,
+        "ContactNo": null,
+        "Email": null,
+        "Fax": null,
+        "NTN": null,
+        "Address": null,
+        "UserId": null,
+        "UserIP": null
+      }
+      const response = await axios.post('SetupCompany', companyPayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };

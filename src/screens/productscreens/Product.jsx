@@ -82,10 +82,10 @@ const Product = () => {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
-        <Space size="large">
-          <EditOutlined onClick={() => showDrawer(record)} style={{ cursor: 'pointer', color: 'blue' }} />
+        <Space >
+          <Button icon={<EditOutlined />} onClick={() => showDrawer(record)} />
           <Popconfirm title="Are you sure to delete this Product ?" onConfirm={() => handleDelete(record.id)}>
-            <DeleteOutlined style={{ cursor: 'pointer', color: 'red' }} />
+          <Button icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       ),
@@ -111,7 +111,7 @@ const Product = () => {
           </Col>
           <Col span={6} style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
             <Form.Item>
-              <Button type="primary" htmlType="submit" icon={<SearchOutlined/>}>Search</Button>
+              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>Search</Button>
             </Form.Item>
             <Form.Item style={{ marginLeft: '10px' }}>
               <Button type="default" onClick={() => {

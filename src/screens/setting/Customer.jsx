@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Drawer, Checkbox, Table, Space, Select, message, Row, Col, Typography, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { getData, initialCustomer } from '../../services/mainApp.service';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -13,155 +14,229 @@ const Customer = () => {
   const [customers, setCustomers] = useState([]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [editingCustomer, setEditingCustomer] = useState(null);
+  const [areas, setAreas] = useState([]);
+  const [customerId, setCustomerId] = useState(null);
 
-  // Function to fetch customers (you should replace this with your API call)
   const fetchCustomers = async () => {
-    // Dummy data for illustration
-    const data = [
-      {
-        key: '1',
-        customerName: 'John Doe',
-        contactPerson: 'Jane Smith',
-        contact1: '1234567890',
-        contact2: '0987654321',
-        area: 'Area 1',
-        address: '123 Street',
-        ntnNo: 'NTN123',
-        isActive: true,
-        creditDays: 30,
-      },
-      // Add more dummy data as needed
-    ];
-    setCustomers(data);
-    setFilteredCustomers(data);
+    try {
+      const data = await initialCustomer();
+      setCustomers(data.DataSet.Table);
+      setFilteredCustomers(data.DataSet.Table);
+      setAreas(data.DataSet.Table5);
+    } catch (error) {
+      console.error('Error fetching location data:', error);
+      openMessage('error', 'There was an error fetching the customer data.');
+    }
   };
 
   useEffect(() => {
     fetchCustomers();
   }, []);
 
+  const openMessage = (type, content) => {
+    message[type](content);
+  };
+
+  const payload = {
+    OperationId: 2,
+    CustomerId: null,
+    CustomerName: null,
+    ContactPerson: null,
+    Contact1: null,
+    Contact2: null,
+    Address: null,
+    AreaId: null,
+    NTN: null,
+    UserId: 1,
+    UserIP: null,
+    CreditDaysCount: null,
+  };
+
+  const url = "SetupCustomer";
+
   const showDrawer = () => {
-    setIsEditing(false);
-    setEditingCustomer(null);
-    drawerForm.resetFields();
     setDrawerVisible(true);
   };
 
   const onCloseDrawer = () => {
     setDrawerVisible(false);
+    drawerForm.resetFields();
+    setIsEditing(false);
+    setCustomerId(null);
   };
 
   const onSearch = values => {
+    const { area, customerName, contactPerson } = values;
     const filteredData = customers.filter(customer => {
-      return Object.keys(values).every(key => {
-        if (!values[key]) return true;
-        if (typeof customer[key] === 'string') {
-          console.log('checking the customer is it  array or object',customer[key])
-          return customer[key].toLowerCase().includes(values[key].toLowerCase());
-        }
-        return customer[key] === values[key];
-      });
+      return (
+        (!area || customer.AreaId?.toString() === area) &&
+        (!customerName || customer.CustomerName.toLowerCase().includes(customerName.toLowerCase())) &&
+        (!contactPerson || customer.ContactPerson.toLowerCase().includes(contactPerson.toLowerCase()))
+      );
     });
     setFilteredCustomers(filteredData);
   };
 
   const onFinish = async values => {
-    if (isEditing) {
-      // Handle update customer logic (you should replace this with your API call)
-      const updatedCustomers = customers.map(customer =>
-        customer.key === editingCustomer.key ? { ...customer, ...values } : customer
-      );
-      setCustomers(updatedCustomers);
-      setFilteredCustomers(updatedCustomers);
-      message.success('Customer updated successfully');
-    } else {
-      // Handle create new customer logic (you should replace this with your API call)
-      const newCustomer = { ...values, key: Date.now().toString() };
-      setCustomers([...customers, newCustomer]);
-      setFilteredCustomers([...customers, newCustomer]);
-      message.success('Customer created successfully');
+    const {
+      address,
+      area,
+      contact1,
+      contact2,
+      contactPerson,
+      creditDays,
+      customerName,
+      isActive,
+      ntnNo,
+    } = values;
+
+    console.log('CustomerId before payload:', customerId); // Log the customerId here
+
+    const payloadToUse =  {
+      ...payload,
+      OperationId: isEditing ? 3 : 2,
+      CustomerName: customerName,
+      ContactPerson: contactPerson,
+      CustomerId: customerId,  // Ensure customerId is used correctly
+      Contact1: contact1,
+      Contact2: contact2,
+      Address: address,
+      AreaId: area,
+      NTN: ntnNo,
+      CreditDaysCount: creditDays,
+      IsActive: isActive,
     }
+
+    console.log('Payload to use:', payloadToUse); // Log the payload here
+
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Customer added/updated successfully!');
+          const updatedCustomerData = data.DataSet.Table;
+          setCustomers(updatedCustomerData);
+          setFilteredCustomers(updatedCustomerData);
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error adding/updating the Customer.');
+        }
+      } catch (error) {
+        console.error('Error fetching Customer data:', error);
+        openMessage('error', 'There was an error adding/updating the Customer.');
+      }
+    };
+    fetchData();
     onCloseDrawer();
   };
 
   const onEditCustomer = customer => {
     setIsEditing(true);
     setEditingCustomer(customer);
-    drawerForm.setFieldsValue(customer);
+    setCustomerId(customer.CustomerId);  // Ensure customerId is set correctly
+    drawerForm.setFieldsValue({
+      customerName: customer.CustomerName,
+      contactPerson: customer.ContactPerson,
+      contact1: customer.Contact1,
+      contact2: customer.Contact2,
+      area: customer.AreaId,
+      address: customer.Address,
+      ntnNo: customer.NTN,
+      isActive: customer.IsActive,
+      creditDays: customer.CreditDaysCount,
+    });
     setDrawerVisible(true);
   };
 
   const onDeleteCustomer = customer => {
-    const updatedCustomers = customers.filter(c => c.key !== customer.key);
-    setCustomers(updatedCustomers);
-    setFilteredCustomers(updatedCustomers);
-    message.success('Customer deleted successfully');
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4,
+      CustomerId: customer.CustomerId,
+    };
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Customer deleted successfully!');
+          const updatedCustomers = data.DataSet.Table;
+          setCustomers(updatedCustomers);
+          setFilteredCustomers(updatedCustomers);
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error deleting the Customer.');
+        }
+      } catch (error) {
+        openMessage('error', 'There was an error deleting the Customer.');
+      }
+    };
+    fetchData();
+  };
+
+  const getAreaName = (areaId) => {
+    const area = areas.find(a => a.AreaId === areaId);
+    return area ? area.Area : 'Unknown';
   };
 
   const columns = [
     {
       title: 'Customer Name',
-      dataIndex: 'customerName',
-      key: 'customerName',
+      dataIndex: 'CustomerName',
+      key: 'CustomerName',
     },
     {
       title: 'Contact Person',
-      dataIndex: 'contactPerson',
-      key: 'contactPerson',
+      dataIndex: 'ContactPerson',
+      key: 'ContactPerson',
     },
     {
       title: 'Contact 1',
-      dataIndex: 'contact1',
-      key: 'contact1',
+      dataIndex: 'Contact1',
+      key: 'Contact1',
     },
     {
       title: 'Contact 2',
-      dataIndex: 'contact2',
-      key: 'contact2',
+      dataIndex: 'Contact2',
+      key: 'Contact2',
     },
     {
       title: 'Area',
-      dataIndex: 'area',
-      key: 'area',
+      dataIndex: 'AreaId',
+      key: 'AreaId',
+      render: (text, record) => getAreaName(record.AreaId),
     },
     {
       title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'Address',
+      key: 'Address',
     },
     {
       title: 'NTN No',
-      dataIndex: 'ntnNo',
-      key: 'ntnNo',
+      dataIndex: 'NTN',
+      key: 'NTN',
     },
     {
       title: 'Active',
-      dataIndex: 'isActive',
-      key: 'isActive',
+      dataIndex: 'IsActive',
+      key: 'IsActive',
       render: isActive => (isActive ? 'Yes' : 'No'),
     },
     {
       title: 'Credit Days',
-      dataIndex: 'creditDays',
-      key: 'creditDays',
+      dataIndex: 'CreditDaysCount',
+      key: 'CreditDaysCount',
     },
     {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" icon={<EditOutlined />} onClick={() => onEditCustomer(record)}>
-
-          </Button>
+          <Button icon={<EditOutlined />} onClick={() => onEditCustomer(record)} />
           <Popconfirm
             title="Are you sure to delete this customer?"
             onConfirm={() => onDeleteCustomer(record)}
             okText="Yes"
             cancelText="No"
           >
-            <Button type="link" icon={<DeleteOutlined />} danger>
-
-            </Button>
+            <Button icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       ),
@@ -171,7 +246,7 @@ const Customer = () => {
   return (
     <div style={{ padding: '5px' }}>
       <Title level={3}>Customer Management</Title>
-      <Form form={searchForm} layout="vertical" onFinish={onSearch} style={{ marginBottom: '00px' }}>
+      <Form form={searchForm} layout="vertical" onFinish={onSearch} style={{ marginBottom: '20px' }}>
         <Row gutter={10}>
           <Col span={6}>
             <Form.Item name="area" label="Area">
@@ -193,39 +268,21 @@ const Customer = () => {
               <Button type="primary" htmlType="submit">Search</Button>
             </Form.Item>
           </Col>
-          {/* Uncomment the reset button if needed */}
-          <Col className='mt-[30px]'>
-            <Form.Item>
-              <Button type="default" onClick={() => {
-                searchForm.resetFields();
-                setFilteredCustomers(customers);
-              }}>
-                Reset
-              </Button>
-            </Form.Item>
-          </Col>
         </Row>
       </Form>
-
-      <div className='flex justify-end'>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={showDrawer}
-          style={{ marginBottom: '20px' }}
-        >
+      <div className='flex justify-end '>
+        <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />} style={{ marginBottom: '10px' }}>
           Create New Customer
         </Button>
       </div>
-
-      <Table columns={columns} dataSource={filteredCustomers} pagination={{ pageSize: 5 }} />
-
+      <Table columns={columns} dataSource={filteredCustomers} rowKey="CustomerId" />
       <Drawer
-        title={isEditing ? 'Edit Customer' : 'Create New Customer'}
+        title={isEditing ? "Edit Customer" : "Create a New Customer"}
         width={720}
         onClose={onCloseDrawer}
         visible={drawerVisible}
         bodyStyle={{ paddingBottom: 80 }}
+
       >
         <Form form={drawerForm} layout="vertical" onFinish={onFinish}>
           <Row gutter={16}>
@@ -253,9 +310,9 @@ const Customer = () => {
               <Form.Item
                 name="contact1"
                 label="Contact 1"
-                rules={[{ required: true, message: 'Please enter contact 1' }]}
+                rules={[{ required: true, message: 'Please enter primary contact number' }]}
               >
-                <Input placeholder="Enter contact 1" />
+                <Input placeholder="Enter primary contact number" />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -263,7 +320,7 @@ const Customer = () => {
                 name="contact2"
                 label="Contact 2"
               >
-                <Input placeholder="Enter contact 2" />
+                <Input placeholder="Enter secondary contact number" />
               </Form.Item>
             </Col>
           </Row>
@@ -272,12 +329,12 @@ const Customer = () => {
               <Form.Item
                 name="area"
                 label="Area"
-                rules={[{ required: true, message: 'Please select area' }]}
+                rules={[{ required: true, message: 'Please enter area' }]}
               >
-                <Select placeholder="Select area">
-                  <Option value="Area 1">Area 1</Option>
-                  <Option value="Area 2">Area 2</Option>
-                  <Option value="Area 3">Area 3</Option>
+                <Select placeholder="Select an area">
+                  {areas.map(area => (
+                    <Option key={area.AreaId} value={area.AreaId}>{area.Area}</Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -302,22 +359,21 @@ const Customer = () => {
             </Col>
             <Col span={12}>
               <Form.Item
-                name="isActive"
-                valuePropName="checked"
-                label="Is Active"
+                name="creditDays"
+                label="Credit Days"
               >
-                <Checkbox />
+                <Input type="number" placeholder="Enter credit days count" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="creditDays"
-                label="Credit Days"
-                rules={[{ required: true, message: 'Please enter credit days' }]}
+                name="isActive"
+                label="Active"
+                valuePropName="checked"
               >
-                <Input placeholder="Enter credit days" />
+                <Checkbox />
               </Form.Item>
             </Col>
           </Row>
