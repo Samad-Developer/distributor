@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Drawer, Table, Space, Select, message, Row, Col, Typography, Popconfirm } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import { initialCompany, getData } from '../../services/mainApp.service';
 
 const { Option } = Select;
@@ -68,10 +68,10 @@ const Company = () => {
         (!ntnNo || company.NTN === ntnNo)
       );
     });
-  
+
     setFilteredcompanies(filteredData);
   };
-  
+
   const onFinish = async (values) => {
     const { address, companyName, contactNo, emailId, faxNo, ntnNo } = values;
 
@@ -93,7 +93,7 @@ const Company = () => {
       const data = await getData(url, payloadToUse);
       if (data.Response) {
         openMessage('success', data.DataSet.Table[0].Message || 'Company added/updated successfully!');
-        const updatedCompanyData = data.DataSet.Table;
+        const updatedCompanyData = data.DataSet.Table1;
         setCompanies(updatedCompanyData);
         setFilteredcompanies(updatedCompanyData);
       } else {
@@ -121,12 +121,30 @@ const Company = () => {
     setDrawerVisible(true);
   };
 
-  const onDeleteCompany = (customer) => {
-    const updatedcompanies = companies.filter((c) => c.CompanyId !== customer.CompanyId);
-    setCompanies(updatedcompanies);
-    setFilteredcompanies(updatedcompanies);
-    message.success('Customer deleted successfully');
+  const onDeleteCompany = company => {
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4,
+      CompanyId: company.CompanyId,
+    };
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Company deleted successfully!');
+          const updatedCompanies = data.DataSet.Table1;
+          setCompanies(updatedCompanies);
+          setFilteredcompanies(updatedCompanies);
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error deleting the Company.');
+        }
+      } catch (error) {
+        openMessage('error', 'There was an error deleting the Company.');
+      }
+    };
+    fetchData();
   };
+
 
   const columns = [
     {
@@ -200,7 +218,7 @@ const Company = () => {
           </Col>
           <Col className="mt-[30px]">
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
                 Search
               </Button>
             </Form.Item>
@@ -303,12 +321,12 @@ const Company = () => {
             </Col>
           </Row>
           <Row gutter={16}>
-           
 
-              <Button type="primary" htmlType="submit" style={{width: '100%'}}>
-                {isEditing ? 'Update' : 'Submit'}
-              </Button>
-          
+
+            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+              {isEditing ? 'Update' : 'Submit'}
+            </Button>
+
           </Row>
         </Form>
       </Drawer>

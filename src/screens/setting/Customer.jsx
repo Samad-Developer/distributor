@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Drawer, Checkbox, Table, Space, Select, message, Row, Col, Typography, Popconfirm } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import { getData, initialCustomer } from '../../services/mainApp.service';
 
 const { Option } = Select;
@@ -67,9 +67,10 @@ const Customer = () => {
 
   const onSearch = values => {
     const { area, customerName, contactPerson } = values;
+  
     const filteredData = customers.filter(customer => {
       return (
-        (!area || customer.AreaId?.toString() === area) &&
+        // (!area || customer.AreaId?.toString() === area) &&
         (!customerName || customer.CustomerName.toLowerCase().includes(customerName.toLowerCase())) &&
         (!contactPerson || customer.ContactPerson.toLowerCase().includes(contactPerson.toLowerCase()))
       );
@@ -112,9 +113,10 @@ const Customer = () => {
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
+        console.log("response is here", data)
         if (data.Response) {
           openMessage('success', data.DataSet.Table[0].Message || 'Customer added/updated successfully!');
-          const updatedCustomerData = data.DataSet.Table;
+          const updatedCustomerData = data.DataSet.Table1;
           setCustomers(updatedCustomerData);
           setFilteredCustomers(updatedCustomerData);
         } else {
@@ -158,7 +160,7 @@ const Customer = () => {
         const data = await getData(url, payloadToUse);
         if (data.Response) {
           openMessage('success', data.DataSet.Table[0].Message || 'Customer deleted successfully!');
-          const updatedCustomers = data.DataSet.Table;
+          const updatedCustomers = data.DataSet.Table1;
           setCustomers(updatedCustomers);
           setFilteredCustomers(updatedCustomers);
         } else {
@@ -249,11 +251,6 @@ const Customer = () => {
       <Form form={searchForm} layout="vertical" onFinish={onSearch} style={{ marginBottom: '20px' }}>
         <Row gutter={10}>
           <Col span={6}>
-            <Form.Item name="area" label="Area">
-              <Input placeholder="Enter area" />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
             <Form.Item name="customerName" label="Customer Name">
               <Input placeholder="Enter customer name" />
             </Form.Item>
@@ -268,6 +265,17 @@ const Customer = () => {
               <Button type="primary" htmlType="submit">Search</Button>
             </Form.Item>
           </Col>
+          <Col className='mt-[30px]'>
+          <Button
+                type="default"
+                onClick={() => {
+                  searchForm.resetFields();
+                  setFilteredCustomers(customers);
+                }}
+              >
+                Reset
+              </Button>
+          </Col>
         </Row>
       </Form>
       <div className='flex justify-end '>
@@ -275,7 +283,7 @@ const Customer = () => {
           Create New Customer
         </Button>
       </div>
-      <Table columns={columns} dataSource={filteredCustomers} rowKey="CustomerId" />
+      <Table columns={columns} dataSource={filteredCustomers} rowKey="CustomerId" pagination={{ pageSize: 5 }}/>
       <Drawer
         title={isEditing ? "Edit Customer" : "Create a New Customer"}
         width={720}

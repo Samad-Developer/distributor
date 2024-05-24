@@ -79,30 +79,38 @@ const Login = () => {
   };
 
   return (
-    <div className="flex mx-auto justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 rounded-lg shadow-md bg-white">
-        <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+        <div className="mb-6 text-center">
+          <h2 className="text-2xl font-bold text-gray-800">Welcome Back</h2>
+          <p className="text-gray-600 ">Sign in to your account</p>
+        </div>
         <Form onSubmit={handleSubmit}>
           <FormTextField // Use InputText component for Username
             label="Username"
-            placeholder="Enter your username"
+            placeholder="example@gmail.com"
             value={username}
             onChange={setUsername}
             size={"large"}
           />
           <FormTextField // Use InputText component for Password
             label="Password"
-            placeholder="Enter your password"
+            placeholder="********"
             type="password" // Set type to password for security
             value={password}
             onChange={setPassword}
             size={"large"}
           />
           <Form.Item>
-            <div className="flex justify-end mt-5 ">
-              <Button type="primary" htmlType="submit" onClick={handleSubmit} disabled={loading}>
-                {loading ? 'Loading...' : 'Login'}
-              </Button>
+            <div className="mt-5">
+              <button
+                htmlType="submit" onClick={handleSubmit} disabled={loading}
+                className="w-full px-4 py-2 font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700"
+                type="submit"
+              >
+                {loading ? 'Loading...' : 'Sign In'}
+              </button>
+
             </div>
           </Form.Item>
         </Form>

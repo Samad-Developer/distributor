@@ -139,3 +139,34 @@ export const login = async (username, password) => {
       throw error; // Re-throw the error for handling in calling components
     }
   };
+
+
+
+  export const initialBranch = async () => {
+  
+    try {
+      const companyPayload = {
+        "OperationId": 1,
+        "BranchId": null,
+        "BranchName": null,
+        "CompanyId": null,
+        "ContactNo": null,
+        "Email": null,
+        "Fax": null,
+        "UserId": 1,
+        "UserIP": null
+      }
+      const response = await axios.post('SetupBranch', companyPayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };
+  
