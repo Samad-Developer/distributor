@@ -2,6 +2,7 @@ import { Divider, Table } from 'antd'
 import React from 'react'
 import FormButton from '../../components/generalcomponents/FormButton'
 import { PlusOutlined } from '@ant-design/icons';
+import RoundButton from '../generalcomponents/RoundButton';
 
 const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, handleChange, onOpen, onClose }) => {
   return (
@@ -9,19 +10,7 @@ const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, han
       <div className='mt-2 pb-10'>
         {searchPanel}
       </div>
-      <div className='flex justify-end'>
-        <FormButton
-          title={addTitle}
-          icon={<PlusOutlined/>}
-          style={{
-            backgroundColor: 'blue',
-            color: 'white',
-            marginBottom: '20px',
-            
-          }}
-          onClick={onOpen}
-        />
-      </div>
+      
       <div>
         {formDrawer}
       </div>
@@ -31,6 +20,12 @@ const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, han
           dataSource={dataSource}
           onChange={handleChange}
           pagination={{ pageSize: 5 }} />
+      </div>
+      <div className='flex justify-end'>
+      <RoundButton
+          onClick={onOpen}
+          
+        />
       </div>
     </div>
   )

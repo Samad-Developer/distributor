@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Drawer, Table, Space, Select, message, Row, Col, Typography, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import { initialCompany, getData } from '../../services/mainApp.service';
+import RoundButton from '../../components/generalcomponents/RoundButton';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -240,14 +241,9 @@ const Company = () => {
       </Form>
 
       <div className="flex justify-end">
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
+        <RoundButton
           onClick={showDrawer}
-          style={{ marginBottom: '20px' }}
-        >
-          Create New Company
-        </Button>
+        />
       </div>
 
       <Table columns={columns} dataSource={filteredcompanies} rowKey="CompanyId" />

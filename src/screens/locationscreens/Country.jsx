@@ -179,7 +179,7 @@ const Country = () => {
 
   // searchPanel for Seaching Data
   const searchPanel = (
-    <div className='flex mb-5'>
+    <div className='flex '>
       <Fragment>
         <div className='flex'>
           <div>

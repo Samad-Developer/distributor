@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Drawer, Checkbox, Table, Space, Select, message, Row, Col, Typography, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import { getData, initialCustomer } from '../../services/mainApp.service';
+import RoundButton from '../../components/generalcomponents/RoundButton';
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -195,11 +196,6 @@ const Customer = () => {
       key: 'Contact1',
     },
     {
-      title: 'Contact 2',
-      dataIndex: 'Contact2',
-      key: 'Contact2',
-    },
-    {
       title: 'Area',
       dataIndex: 'AreaId',
       key: 'AreaId',
@@ -210,11 +206,7 @@ const Customer = () => {
       dataIndex: 'Address',
       key: 'Address',
     },
-    {
-      title: 'NTN No',
-      dataIndex: 'NTN',
-      key: 'NTN',
-    },
+
     {
       title: 'Active',
       dataIndex: 'IsActive',
@@ -279,9 +271,9 @@ const Customer = () => {
         </Row>
       </Form>
       <div className='flex justify-end '>
-        <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />} style={{ marginBottom: '10px' }}>
-          Create New Customer
-        </Button>
+        <RoundButton
+          onClick={showDrawer}
+        />
       </div>
       <Table columns={columns} dataSource={filteredCustomers} rowKey="CustomerId" pagination={{ pageSize: 5 }}/>
       <Drawer
