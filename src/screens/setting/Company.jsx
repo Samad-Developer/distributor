@@ -270,9 +270,12 @@ const Company = () => {
               <Form.Item
                 name="contactNo"
                 label="Contact No"
-                rules={[{ required: true, message: 'Please enter contact number' }]}
+                rules={[
+                  { required: true, message: 'Please enter contact no' },
+                  { pattern: /^(\+92|0)?3\d{9}$/, message: 'Please enter a valid contact number' }
+              ]}
               >
-                <Input placeholder="Enter Contact No" />
+                <Input placeholder="+923485497976" />
               </Form.Item>
             </Col>
           </Row>
@@ -281,18 +284,24 @@ const Company = () => {
               <Form.Item
                 name="faxNo"
                 label="Fax No"
-                rules={[{ required: true, message: 'Please enter fax number' }]}
+                rules={[
+                  { required: true, message: 'Please enter your fax number' },
+                  { pattern: /^\+?\d{6,15}$/, message: 'Please enter a valid fax number' }
+                ]}
               >
-                <Input placeholder="Enter Fax No" />
+                <Input placeholder="123-4567890" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="emailId"
                 label="Email Id"
-                rules={[{ required: true, message: 'Please enter email ID' }]}
+                rules={[
+                  { required: true, message: 'Please enter your email address' },
+                  { type: 'email', message: 'Please enter a valid email address' }
+                ]}
               >
-                <Input placeholder="Enter Email ID" />
+                <Input placeholder="example@gmail.com" />
               </Form.Item>
             </Col>
           </Row>
@@ -310,9 +319,12 @@ const Company = () => {
               <Form.Item
                 name="address"
                 label="Address"
-                rules={[{ required: true, message: 'Please enter address' }]}
+                rules={[
+                  { required: true, message: 'Please enter your address' },
+                  { min: 10, message: 'Address must be at least 10 characters' }
+                ]}
               >
-                <Input placeholder="Enter Address" />
+                <Input placeholder="123 Main St, City, Country" />
               </Form.Item>
             </Col>
           </Row>
