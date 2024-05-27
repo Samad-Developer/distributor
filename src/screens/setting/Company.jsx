@@ -20,7 +20,7 @@ const Company = () => {
     message[type](content);
   };
 
-  const fetchCustomers = async () => {
+  const fetchCompanies = async () => {
     try {
       const data = await initialCompany();
       setCompanies(data.DataSet.Table);
@@ -32,7 +32,7 @@ const Company = () => {
   };
 
   useEffect(() => {
-    fetchCustomers();
+    fetchCompanies();
   }, []);
 
   const payload = {
@@ -219,7 +219,7 @@ const Company = () => {
           </Col>
           <Col className="mt-[30px]">
             <Form.Item>
-              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
+              <Button className='bg-[#4F46E5]' type="primary" htmlType="submit" icon={<SearchOutlined />}>
                 Search
               </Button>
             </Form.Item>

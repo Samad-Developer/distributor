@@ -14,6 +14,12 @@ const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, han
       <div>
         {formDrawer}
       </div>
+      <div className='flex justify-end'>
+      <RoundButton
+          onClick={onOpen}
+          
+        />
+      </div>
       <div className='mt-1'>
         <Table
           columns={columns}
@@ -21,12 +27,7 @@ const BasicForm = ({ searchPanel, addTitle, formDrawer, columns, dataSource, han
           onChange={handleChange}
           pagination={{ pageSize: 5 }} />
       </div>
-      <div className='flex justify-end'>
-      <RoundButton
-          onClick={onOpen}
-          
-        />
-      </div>
+      
     </div>
   )
 }

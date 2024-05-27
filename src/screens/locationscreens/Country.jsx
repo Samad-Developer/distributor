@@ -205,7 +205,7 @@ const Country = () => {
               title='Search'
               icon={<SearchOutlined/>}
               style={{
-                backgroundColor: 'blue',
+                backgroundColor: '#4F46E5',
                 color: 'white',
                 marginLeft: '10px',
                 marginTop: '26px'
@@ -232,14 +232,15 @@ const Country = () => {
           value={newCountry}
           onChange={setNewCountry}
         />
-        <div className='flex justify-end'>
+        <div className=''>
           <FormButton
             onClick={handleAdd}
             title={editingCountry ? "Update" : "Add Country"}
             style={{
               color: 'white',
               backgroundColor: 'blue',
-              marginTop: '15px'
+              marginTop: '30px',
+              width: '100%'
             }}
           />
         </div>

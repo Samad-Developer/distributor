@@ -285,7 +285,7 @@ const Town = () => {
           title='Search'
           icon={<SearchOutlined/>}
           style={{
-            backgroundColor: 'blue',
+            backgroundColor: '#4F46E5',
             color: 'white',
             marginLeft: '20px',
             marginTop: '26px'

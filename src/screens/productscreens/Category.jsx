@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Drawer, Form, Input, Select, Table, Space, Popconfirm, message, Row, Col } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { initialCategory, getData } from '../../services/mainApp.service';
+import RoundButton from '../../components/generalcomponents/RoundButton';
 
 const { Option } = Select;
 
@@ -9,20 +11,44 @@ const Category = () => {
   const [searchForm] = Form.useForm();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
-  const [categories, setCategories] = useState([
-    // Sample data
-    { id: 1, brandName: 'Brand 1', categoryName: 'Category 1' },
-    { id: 2, brandName: 'Brand 2', categoryName: 'Category 2' },
-  ]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [categories, setCategories] = useState();
+  const [filteredCategories, setFilteredCategories] = useState();
 
-  const showDrawer = (category = null) => {
-    setEditingCategory(category);
-    setDrawerVisible(true);
-    if (category) {
-      form.setFieldsValue(category);
-    } else {
-      form.resetFields();
+  const openMessage = (type, content) => {
+    message[type](content);
+  };
+
+  const fetchCategory = async () => {
+    try {
+      const data = await initialCategory();
+      // console.log('iniital brand is comming', data)
+      setCategories(data.DataSet.Table);
+      setFilteredCategories(data.DataSet.Table);
+
+    } catch (error) {
+      console.error('Error fetching Categories data:', error);
+      openMessage('error', 'There was an error fetching the Categories data.');
     }
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  const payload = {
+    "OperationId": 1,
+    "CategoryId": null,
+    "CategoryName": null,
+    "UserId": 1,
+    "UserIP": null
+}
+  const url = "SetupCategory"
+
+  const showDrawer = () => {
+    setIsEditing(false);
+    setDrawerVisible(true);
+    form.resetFields()
   };
 
   const onClose = () => {
@@ -32,8 +58,8 @@ const Category = () => {
   const onSearch = (values) => {
     console.log('Search Values: ', values);
     const filteredCategories = categories.filter(category => {
-      return (!values.brandName || category.brandName === values.brandName) &&
-        (!values.categoryName || category.categoryName.toLowerCase().includes(values.categoryName.toLowerCase()));
+      return (!values.brandName || category.BrandName === values.brandName) &&
+        (!values.categoryName || category.CategoryName.toLowerCase().includes(values.categoryName.toLowerCase()));
     });
     setCategories(filteredCategories);
   };
@@ -87,8 +113,8 @@ const Category = () => {
   ];
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Form form={searchForm} layout="vertical" onFinish={onSearch} style={{ marginBottom: '20px' }}>
+    <div >
+      <Form form={searchForm} layout="vertical" onFinish={onSearch}>
         <Row gutter={16}>
           <Col span={6}>
             <Form.Item name="brandName" label="Brand">
@@ -105,7 +131,7 @@ const Category = () => {
           </Col>
           <Col span={6} style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
             <Form.Item>
-              <Button type="primary" htmlType="submit" icon={<SearchOutlined/>}>Search</Button>
+              <Button type="primary" className='bg-[#4F46E5]' htmlType="submit" icon={<SearchOutlined/>}>Search</Button>
             </Form.Item>
             <Form.Item style={{ marginLeft: '10px' }}>
               <Button type="default" onClick={() => {
@@ -123,9 +149,9 @@ const Category = () => {
       </Form>
 
       <div className='flex justify-end'>
-        <Button type="primary" onClick={() => showDrawer()} style={{ marginBottom: '20px' }} icon={<PlusOutlined />}>
-          Create New Category
-        </Button>
+      <RoundButton
+          onClick={() => showDrawer()}
+        />
       </div>
 
       <Table columns={columns} dataSource={categories} rowKey="id" />

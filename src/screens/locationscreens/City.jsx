@@ -231,7 +231,7 @@ const City = () => {
           title='Search'
           icon={<SearchOutlined />}
           style={{
-            backgroundColor: 'blue',
+            backgroundColor: '#4F46E5',
             color: 'white',
             marginLeft: '20px',
             marginTop: '26px'
@@ -300,14 +300,15 @@ const City = () => {
             }}
           />
         </div>
-        <div className='flex justify-end'>
+        <div className=''>
           <FormButton
             onClick={handleAdd}
             title={editDisplay ? "Update" : "Add City"}
             style={{
               color: 'white',
               backgroundColor: 'blue',
-              marginTop: '20px'
+              marginTop: '30px',
+              width: '100%'
             }}
           />
         </div>

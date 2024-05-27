@@ -19,7 +19,7 @@ const Sidebar = () => {
     } else {
       return (
         <Menu.Item key={menuItem.MenuId}>
-          <Link to={menuItem.Menu_URL}>{menuItem.Menu_Name}</Link>
+          <Link  to={menuItem.Menu_URL}>{menuItem.Menu_Name}</Link>
         </Menu.Item>
       );
     }
@@ -27,7 +27,7 @@ const Sidebar = () => {
 
   return (
     <aside className="w-[200px]">
-      <Menu mode="vertical">
+      <Menu mode="vertical" >
         {menuItems.filter((item) => item.Parent_Id === null && item.Is_Displayed_In_Menu == true).map((item) => renderSubMenu(item))}
       </Menu>
     </aside>

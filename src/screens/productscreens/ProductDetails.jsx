@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Drawer, Form, Input, Select, Checkbox, Row, Col, Space, message } from 'antd';
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import { initialProductDetail, getData } from '../../services/mainApp.service';
 
 const { Option } = Select;
 
@@ -39,6 +40,8 @@ const ProductDetails = () => {
   const [searchFilters, setSearchFilters] = useState({});
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
+  const [isEditing, setIsEditing] = useState();
+  const [filteredProducts, setFilteredProducts] = useState()
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -149,7 +152,7 @@ const ProductDetails = () => {
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
+          <Button className='bg-[#4F46E5]' type="primary" htmlType="submit" icon={<SearchOutlined />}>
             Search
           </Button>
         </Form.Item>

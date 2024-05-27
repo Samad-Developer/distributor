@@ -34,7 +34,7 @@ const Area = () => {
   const [areaData, setAreaData] = useState()
    // seaching variable
    const [filteredAreaData, setFilteredAreaData] = useState()
-     // variable for editing
+   // variable for editing
   const [editArea, setEditArea] = useState()
   const [editDisplay, setEditDisplay] = useState();
 
@@ -310,7 +310,7 @@ const Area = () => {
           title='Search'
           icon={<SearchOutlined/>}
           style={{
-            backgroundColor: 'blue',
+            backgroundColor: '#4F46E5',
             color: 'white',
             marginLeft: '20px',
             marginTop: '26px'
@@ -482,7 +482,7 @@ const Area = () => {
           <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           <Popconfirm
             title="Delete the task"
-            description="Are you sure to delete this Province?"
+            description="Are you sure to delete this Area ?"
             okText="Yes"
             cancelText="No"
             onConfirm={() => handleDelete(record)}

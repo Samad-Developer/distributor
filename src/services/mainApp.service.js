@@ -170,3 +170,129 @@ export const login = async (username, password) => {
     }
   };
   
+
+  export const initialBrand = async () => {
+  
+    try {
+      const brandPayload = {
+        "OperationId":1,
+        "BrandId": null,
+        "BrandName": null,
+        "UserId":1,
+        "UserIP": null
+      }
+      const response = await axios.post('SetupBrand', brandPayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };
+
+ 
+
+  export const initialSize = async () => {
+  
+    try {
+      const sizePayload = {
+        "OperationId": 1,
+        "SizeId": null,
+        "SizeName": null,
+        "UserId": 1,
+        "UserIP": null
+      }
+      const response = await axios.post('SetupSize', sizePayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };
+
+  export const initialCategory = async () => {
+  
+    try {
+      const categoryPayload = {
+        "OperationId": 1,
+        "CategoryId": null,
+        "CategoryName": null,
+        "UserId": 1,
+        "UserIP": null
+      }
+      const response = await axios.post('SetupCategory', categoryPayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };
+
+  export const initialProduct = async () => {
+  
+    try {
+      const productPayload = {
+        "OperationId": 1,
+        "ProductId": null,
+        "ProductName": null,
+        "CategoryId": null,
+        "UserId": 1,
+        "UserIP": null       
+}
+      const response = await axios.post('SetupProduct', productPayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };
+
+  export const initialProductDetail = async () => {
+  
+    try {
+      const productDetailsPayload = {
+        "OperationId": 1,
+        "ProductId": null,
+        "ProductDetailId": null,
+        "SizeId": null,
+        "BrandId": null,
+        "UserId": 1,
+        "UserIP": null,
+        "Amount": null
+}
+      const response = await axios.post('SetupProductDetail', productDetailsPayload);
+  
+      if (response.status === 200) { // Check for successful HTTP status code
+        console.log('initial data response is coming', response.data)
+        return response.data; // Return the parsed data from the response
+      } else {
+        throw new Error(`API request failed with status code: ${response.status}`); // Throw a more informative error
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error); // Log the error for debugging
+      throw error; // Re-throw the error for handling in calling components
+    }
+  };

@@ -12,7 +12,8 @@ const RoundButton = ({ text, onClick, style }) => {
       style={{
         width: '40px',
         height: '40px',
-        marginBottom: '20px'
+        marginBottom: '10px',
+        backgroundColor: '#4F46E5'
       }}
     >
       {text}

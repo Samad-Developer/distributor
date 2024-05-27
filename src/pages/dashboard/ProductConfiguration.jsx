@@ -4,6 +4,7 @@ import Brand from '../../screens/productscreens/Brand'
 import Category from '../../screens/productscreens/Category'
 import Product from '../../screens/productscreens/Product'
 import ProductDetails from '../../screens/productscreens/ProductDetails'
+import Size from '../../screens/productscreens/Size';
 
 const { TabPane } = Tabs;
 
@@ -20,7 +21,10 @@ const ProductConfiguration = () => {
         <TabPane tab="Product" key="3">
           <Product />
         </TabPane>
-        <TabPane tab="Product Details" key="4">
+        <TabPane tab="Size" key="4">
+          <Size />
+        </TabPane>
+        <TabPane tab="Product Details" key="5">
           <ProductDetails />
         </TabPane>
       </Tabs>

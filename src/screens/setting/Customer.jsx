@@ -254,7 +254,7 @@ const Customer = () => {
           </Col>
           <Col className='mt-[30px]'>
             <Form.Item>
-              <Button type="primary" htmlType="submit">Search</Button>
+              <Button className='bg-[#4F46E5]' type="primary" htmlType="submit">Search</Button>
             </Form.Item>
           </Col>
           <Col className='mt-[30px]'>
@@ -290,7 +290,13 @@ const Customer = () => {
               <Form.Item
                 name="customerName"
                 label="Customer Name"
-                rules={[{ required: true, message: 'Please enter customer name' }]}
+                rules={[
+                  { required: true, message: 'Please enter customer name' },
+                  {
+                    pattern: /^[a-zA-Z\s]+$/,
+                    message: 'Customer name should only contain letters and spaces',
+                  },
+                ]}
               >
                 <Input placeholder="Enter customer name" />
               </Form.Item>
@@ -310,9 +316,15 @@ const Customer = () => {
               <Form.Item
                 name="contact1"
                 label="Contact 1"
-                rules={[{ required: true, message: 'Please enter primary contact number' }]}
+                rules={[
+                  { required: true, message: 'Please enter primary contact number' },
+                  {
+                    pattern: /^(\+92|0)?[0-9]{10,13}$/,
+                    message: 'Please enter a valid Pakistani contact number',
+                  },
+                ]}
               >
-                <Input placeholder="Enter primary contact number" />
+                <Input placeholder="e.g., +92 321 1234567 or 0321 1234567" />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -320,7 +332,7 @@ const Customer = () => {
                 name="contact2"
                 label="Contact 2"
               >
-                <Input placeholder="Enter secondary contact number" />
+                <Input placeholder="e.g., +92 321 1234567 or 0321 1234567" />
               </Form.Item>
             </Col>
           </Row>
@@ -342,9 +354,12 @@ const Customer = () => {
               <Form.Item
                 name="address"
                 label="Address"
-                rules={[{ required: true, message: 'Please enter address' }]}
+                rules={[
+                  { required: true, message: 'Please enter your address' },
+                  { min: 10, message: 'Address must be at least 10 characters' }
+                ]}
               >
-                <Input placeholder="Enter address" />
+                <Input placeholder="123 Main St, City, Country" />
               </Form.Item>
             </Col>
           </Row>

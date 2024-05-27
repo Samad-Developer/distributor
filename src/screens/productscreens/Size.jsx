@@ -1,87 +1,87 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Drawer, Form, Input, Select, Table, Space, Popconfirm, message, Row, Col } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { initialBrand, getData } from '../../services/mainApp.service';
+import { initialSize, getData } from '../../services/mainApp.service';
 import RoundButton from '../../components/generalcomponents/RoundButton';
 
 const { Option } = Select;
 
-const Brand = () => {
+const Size = () => {
 
   const [form] = Form.useForm();
   const [searchForm] = Form.useForm();
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [editingBrand, setEditingBrand] = useState(null);
+  const [editingSize, seteditingSize] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [brands, setBrands] = useState();
-  const [filteredBrands, setFilteredBrands] = useState()
+  const [sizes, setsizes] = useState();
+  const [filteredsizes, setFilteredsizes] = useState()
 
   const openMessage = (type, content) => {
     message[type](content);
   };
 
-  const fetchBrands = async () => {
+  const fetchsizes = async () => {
     try {
-      const data = await initialBrand();
+      const data = await initialSize();
       // console.log('iniital brand is comming', data)
-      setBrands(data.DataSet.Table);
-      setFilteredBrands(data.DataSet.Table);
+      setsizes(data.DataSet.Table);
+      setFilteredsizes(data.DataSet.Table);
 
     } catch (error) {
-      console.error('Error fetching Brand data:', error);
-      openMessage('error', 'There was an error fetching the Brand data.');
+      console.error('Error fetching size data:', error);
+      openMessage('error', 'There was an error fetching the Size data.');
     }
   };
 
   useEffect(() => {
-    fetchBrands();
+    fetchsizes();
   }, []);
 
 
   const payload = {
-    "OperationId":1,
-    "BrandId": null,
-    "BrandName": null,
-    "UserId":1,
+    "OperationId": 1,
+    "SizeId": null,
+    "SizeName": null,
+    "UserId": 1,
     "UserIP": null
   }
-  const url = "SetupBrand"
+  const url = "SetupSize"
 
   const onFinish = async values => {
 
-    const { brandName, BrandId } = values;
+    const { sizeName } = values;
+    
     const payloadToUse = {
       ...payload,
       OperationId: isEditing ? 3 : 2,
-      BrandName: brandName,
-      BrandId: isEditing ? editingBrand.BrandId : null,
+      SizeName: sizeName,
+      SizeId: isEditing ? editingSize.SizeId : null,
     }
     const fetchData = async () => {
       try {
         const data = await getData(url, payloadToUse);
         if (data.Response) {
-          openMessage('success', data.DataSet.Table[0].Message || 'Brand added/updated successfully!');
+          openMessage('success', data.DataSet.Table[0].Message || 'Size added/updated successfully!');
           const updatedBrandData = data.DataSet.Table1;
-          setBrands(updatedBrandData);
-          setFilteredBrands(updatedBrandData);
+          setsizes(updatedBrandData);
+          setFilteredsizes(updatedBrandData);
         } else {
-          openMessage('error', data.ResponseMessage || 'There was an error adding/updating the Brand.');
+          openMessage('error', data.ResponseMessage || 'There was an error adding/updating the Size.');
         }
       } catch (error) {
-        console.error('Error fetching Brand data:', error);
-        openMessage('error', 'There was an error adding/updating the Brand.');
+        console.error('Error fetching Size data:', error);
+        openMessage('error', 'There was an error adding/updating the Size.');
       }
     };
     fetchData();
     onClose();
   };
 
-  const onEditBrand = brand => {
-   
+  const onEditBrand = size => {
     setIsEditing(true);
-    setEditingBrand(brand);
+    seteditingSize(size);
     form.setFieldsValue({
-      brandName: brand.BrandName,
+      sizeName: size.SizeName,
     });
     setDrawerVisible(true);
   };
@@ -97,24 +97,24 @@ const Brand = () => {
   };
 
   const onSearch = (values) => {
-    const { brandName } = values;
+    const { sizeName } = values;
     if (values) {
-      const searchBrands = brands.filter(brand => {
-        return (!values.brandName || brand.BrandName.toLowerCase().includes(brandName.toLowerCase()));
+      const searchsizes = sizes.filter(size => {
+        return (!values.sizeName || size.SizeName.toLowerCase().includes(sizeName.toLowerCase()));
       });
-      setFilteredBrands(searchBrands);
+      setFilteredsizes(searchsizes);
     } else {
-      setFilteredBrands(brands)
+      setFilteredsizes(sizes)
     }
   };
 
 
 
-  const handleDelete = (brand) => {
+  const handleDelete = (size) => {
     const payloadToUse = {
       ...payload,
       OperationId: 4,
-      BrandId: brand.BrandId,
+      SizeId: size.SizeId,
     };
     const fetchData = async () => {
       try {
@@ -122,8 +122,8 @@ const Brand = () => {
         if (data.Response) {
           openMessage('success', data.DataSet.Table[0].Message || 'Brand deleted successfully!');
           const updatedBrand = data.DataSet.Table1;
-          setBrands(updatedBrand);
-          setFilteredBrands(updatedBrand);
+          setsizes(updatedBrand);
+          setFilteredsizes(updatedBrand);
         } else {
           openMessage('error', data.ResponseMessage || 'There was an error deleting the Brand.');
         }
@@ -136,9 +136,9 @@ const Brand = () => {
 
   const columns = [
     {
-      title: 'Brand Name',
-      dataIndex: 'BrandName',
-      key: 'BrandName',
+      title: 'Size Name',
+      dataIndex: 'SizeName',
+      key: 'SizeName',
     },
     {
       title: 'Action',
@@ -161,11 +161,11 @@ const Brand = () => {
 
   return (
     <div >
-      <Form form={searchForm} layout="vertical" onFinish={onSearch} >
+      <Form form={searchForm} layout="vertical" onFinish={onSearch} style={{ marginBottom: '20px' }}>
         <Row gutter={16}>
           <Col span={6}>
-            <Form.Item name="brandName" label="Brand Name">
-              <Input placeholder="Enter Brand Name" />
+            <Form.Item name="sizeName" label="Size Name">
+              <Input placeholder="Enter Size Name" />
             </Form.Item>
           </Col>
           <Col>
@@ -177,7 +177,7 @@ const Brand = () => {
             <Form.Item>
               <Button type="default" onClick={() => {
                 searchForm.resetFields();
-                setFilteredBrands(brands)
+                setFilteredsizes(sizes)
               }} style={{ marginTop: '30px' }}>
                 Reset
               </Button>
@@ -188,15 +188,15 @@ const Brand = () => {
 
 
       <div className='flex justify-end'>
-        <RoundButton
+      <RoundButton
           onClick={() => showDrawer()}
         />
       </div>
 
-      <Table columns={columns} dataSource={filteredBrands} rowKey="id" pagination={{ pageSize: 5 }}/>
+      <Table columns={columns} dataSource={filteredsizes} rowKey="id" pagination={{ pageSize: 5 }}/>
 
       <Drawer
-        title={ isEditing ? "Edit Brand" : "Create New Brand"}
+        title={isEditing ? "Edit Size" : "Create New Size"}
         width={360}
         onClose={onClose}
         visible={drawerVisible}
@@ -204,11 +204,11 @@ const Brand = () => {
       >
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
-            name="brandName"
-            label="Brand Name"
-            rules={[{ required: true, message: 'Please enter brand name' }]}
+            name="sizeName"
+            label="Size Name"
+            rules={[{ required: true, message: 'Please enter size name' }]}
           >
-            <Input placeholder="Enter Brand Name" />
+            <Input placeholder="Enter Size Name" />
           </Form.Item>
           <Form.Item>
           
@@ -223,5 +223,5 @@ const Brand = () => {
   );
 };
 
-export default Brand;
+export default Size;
 

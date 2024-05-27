@@ -21,7 +21,7 @@ const Branch = () => {
     message[type](content);
   };
 
-  const fetchCustomers = async () => {
+  const fetchBranches = async () => {
     try {
       const data = await initialBranch();
       console.log('iniital branch is comming', data)
@@ -36,7 +36,7 @@ const Branch = () => {
   };
 
   useEffect(() => {
-    fetchCustomers();
+    fetchBranches();
   }, []);
 
   const showDrawer = () => {
@@ -219,9 +219,11 @@ const Branch = () => {
               label="Company"
             >
               <Select placeholder="Select area">
-                <Option value="Area 1">company 1</Option>
-                <Option value="Area 2">company 2</Option>
-                <Option value="Area 3">company 3</Option>
+                {companies.map(({ CompanyId, CompanyName }) => (
+                  <Option key={CompanyId} value={CompanyId}>
+                    {CompanyName}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -237,7 +239,7 @@ const Branch = () => {
           </Col>
           <Col className='mt-[30px]'>
             <Form.Item>
-              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>Search</Button>
+              <Button className='bg-[#4F46E5]' type="primary" htmlType="submit" icon={<SearchOutlined />}>Search</Button>
             </Form.Item>
           </Col>
           {/* Uncomment the reset button if needed */}
@@ -305,7 +307,7 @@ const Branch = () => {
                 rules={[
                   { required: true, message: 'Please enter contact no' },
                   { pattern: /^(\+92|0)?3\d{9}$/, message: 'Please enter a valid contact number' }
-              ]}
+                ]}
               >
                 <Input placeholder="+923485497976" />
               </Form.Item>
