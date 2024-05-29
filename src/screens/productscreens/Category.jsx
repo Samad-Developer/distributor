@@ -25,6 +25,7 @@ const Category = () => {
       // console.log('iniital brand is comming', data)
       setCategories(data.DataSet.Table);
       setFilteredCategories(data.DataSet.Table);
+      
 
     } catch (error) {
       console.error('Error fetching Categories data:', error);
@@ -56,56 +57,92 @@ const Category = () => {
   };
 
   const onSearch = (values) => {
-    console.log('Search Values: ', values);
     const filteredCategories = categories.filter(category => {
-      return (!values.brandName || category.BrandName === values.brandName) &&
-        (!values.categoryName || category.CategoryName.toLowerCase().includes(values.categoryName.toLowerCase()));
+      return (!values.categoryName || category.CategoryName.toLowerCase().includes(values.categoryName.toLowerCase()));
     });
-    setCategories(filteredCategories);
+    setFilteredCategories(filteredCategories);
   };
 
   const onFinish = (values) => {
-    if (editingCategory) {
-      setCategories((prev) =>
-        prev.map((item) =>
-          item.id === editingCategory.id ? { ...item, ...values } : item
-        )
-      );
-      message.success('Category updated successfully');
-    } else {
-      setCategories((prev) => [
-        ...prev,
-        { ...values, id: prev.length + 1 },
-      ]);
-      message.success('Category created successfully');
+    const { categoryName } = values;
+    const payloadToUse = {
+      ...payload,
+      OperationId: isEditing ? 3 : 2,
+      CategoryName: categoryName,
+      CategoryId: isEditing ? editingCategory.CategoryId : null,
     }
-    setDrawerVisible(false);
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Category added/updated successfully!');
+          const updatedCategoryData = data.DataSet.Table1;
+          setCategories(updatedCategoryData);
+          setFilteredCategories(updatedCategoryData);
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error adding/updating the Category.');
+        }
+      } catch (error) {
+        console.error('Error fetching Category data:', error);
+        openMessage('error', 'There was an error adding/updating the Category.');
+      }
+    };
+    fetchData();
+    onClose();
   };
 
-  const handleDelete = (id) => {
-    setCategories((prev) => prev.filter((item) => item.id !== id));
-    message.success('Category deleted successfully');
+  const handleDelete = (category) => {
+    const payloadToUse = {
+      ...payload,
+      OperationId: 4,
+      CategoryId: category.CategoryId,
+    };
+    const fetchData = async () => {
+      try {
+        const data = await getData(url, payloadToUse);
+        if (data.Response) {
+          openMessage('success', data.DataSet.Table[0].Message || 'Category deleted successfully!');
+          const updatedCategory = data.DataSet.Table1;
+          setCategories(updatedCategory);
+          setFilteredCategories(updatedCategory);
+        } else {
+          openMessage('error', data.ResponseMessage || 'There was an error deleting the Category.');
+        }
+      } catch (error) {
+        openMessage('error', 'There was an error deleting the Category');
+      }
+    };
+    fetchData();
+  };
+
+  const onEditCategory = category => {
+    setIsEditing(true);
+    setEditingCategory(category);
+    form.setFieldsValue({
+      categoryName: category.CategoryName,
+    });
+    setDrawerVisible(true);
   };
 
   const columns = [
     {
-      title: 'Brand Name',
-      dataIndex: 'brandName',
-      key: 'brandName',
-    },
-    {
       title: 'Category Name',
-      dataIndex: 'categoryName',
-      key: 'categoryName',
+      dataIndex: 'CategoryName',
+      key: 'CategoryName',
     },
     {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
-        <Space size="large">
-          <EditOutlined onClick={() => showDrawer(record)} style={{ cursor: 'pointer', color: 'blue' }} />
-          <Popconfirm title="Are you sure to delete this Category ?" onConfirm={() => handleDelete(record.id)}>
-            <DeleteOutlined style={{ cursor: 'pointer', color: 'red' }} />
+        <Space size="middle">
+          <Button icon={<EditOutlined />} onClick={() => onEditCategory(record)} />
+          <Popconfirm
+            title="Are you sure to delete this Category ?"
+            onConfirm={() => handleDelete(record)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       ),
@@ -115,15 +152,7 @@ const Category = () => {
   return (
     <div >
       <Form form={searchForm} layout="vertical" onFinish={onSearch}>
-        <Row gutter={16}>
-          <Col span={6}>
-            <Form.Item name="brandName" label="Brand">
-              <Select placeholder="Select Brand">
-                <Option value="Brand 1">Brand 1</Option>
-                <Option value="Brand 2">Brand 2</Option>
-              </Select>
-            </Form.Item>
-          </Col>
+        <Row gutter={16}> 
           <Col span={6}>
             <Form.Item name="categoryName" label="Category Name">
               <Input placeholder="Enter Category Name" />
@@ -136,10 +165,7 @@ const Category = () => {
             <Form.Item style={{ marginLeft: '10px' }}>
               <Button type="default" onClick={() => {
                 searchForm.resetFields();
-                setCategories([
-                  { id: 1, brandName: 'Brand 1', categoryName: 'Category 1' },
-                  { id: 2, brandName: 'Brand 2', categoryName: 'Category 2' },
-                ]);
+                setFilteredCategories(categories);
               }}>
                 Reset
               </Button>
@@ -154,7 +180,7 @@ const Category = () => {
         />
       </div>
 
-      <Table columns={columns} dataSource={categories} rowKey="id" />
+      <Table columns={columns} dataSource={filteredCategories} rowKey="id" />
 
       <Drawer
         title={editingCategory ? "Edit Category" : "Create New Category"}
@@ -164,16 +190,6 @@ const Category = () => {
         bodyStyle={{ paddingBottom: 80 }}
       >
         <Form form={form} layout="vertical" onFinish={onFinish}>
-          <Form.Item
-            name="brandName"
-            label="Brand"
-            rules={[{ required: true, message: 'Please select a brand' }]}
-          >
-            <Select placeholder="Select Brand">
-              <Option value="Brand 1">Brand 1</Option>
-              <Option value="Brand 2">Brand 2</Option>
-            </Select>
-          </Form.Item>
           <Form.Item
             name="categoryName"
             label="Category Name"

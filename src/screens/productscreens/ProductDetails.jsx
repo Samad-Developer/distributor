@@ -1,42 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Drawer, Form, Input, Select, Checkbox, Row, Col, Space, message } from 'antd';
+import { Table, Button, Drawer, Form, Input, Popconfirm, Select, Checkbox, Row, Col, Space, message } from 'antd';
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { initialProductDetail, getData } from '../../services/mainApp.service';
+import RoundButton from '../../components/generalcomponents/RoundButton';
 
 const { Option } = Select;
 
 const ProductDetails = () => {
 
-
-  const mockProducts = [
-    {
-      id: 1,
-      category: 'Category1',
-      product: 'Product1',
-      size: 'Small',
-      price: 10.0,
-      isActive: true,
-    },
-    {
-      id: 2,
-      category: 'Category2',
-      product: 'Product2',
-      size: 'Medium',
-      price: 20.0,
-      isActive: false,
-    },
-    {
-      id: 3,
-      category: 'Category1',
-      product: 'Product3',
-      size: 'Large',
-      price: 30.0,
-      isActive: true,
-    },
-  ];
-
-  const [products, setProducts] = useState(mockProducts);
+  const [products, setProducts] = useState();
   const [searchFilters, setSearchFilters] = useState({});
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
@@ -44,20 +17,38 @@ const ProductDetails = () => {
   const [filteredProducts, setFilteredProducts] = useState()
   const [form] = Form.useForm();
 
+  const openMessage = (type, content) => {
+    message[type](content);
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const data = await initialProductDetail();
+      setProducts(data.DataSet.Table);
+      setFilteredProducts(data.DataSet.Table);
+      // setCategoriesForProduct(data.DataSet.Table1);
+    } catch (error) {
+      console.error('Error fetching ProductDetails data:', error);
+      openMessage('error', 'There was an error fetching the ProductDetails data.');
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get('/api/products');
-      setProducts(response.data);
-    } catch (error) {
-      message.error('Failed to fetch products');
-    }
+  const payload = {
+    "OperationId": 1,
+    "ProductId": null,
+    "ProductDetailId": null,
+    "SizeId": null,
+    "BrandId": null,
+    "UserId": 1,
+    "UserIP": null,
+    "Amount": null
   };
 
-  
+  const url = "SetupProductDetail";
 
   const handleSearch = (values) => {
     setSearchFilters(values);
@@ -111,18 +102,24 @@ const ProductDetails = () => {
   };
 
   const columns = [
-    { title: 'Category', dataIndex: 'category', key: 'category' },
-    { title: 'Product', dataIndex: 'product', key: 'product' },
-    { title: 'Size', dataIndex: 'size', key: 'size' },
-    { title: 'Price', dataIndex: 'price', key: 'price' },
-    { title: 'Active', dataIndex: 'isActive', key: 'isActive', render: (isActive) => (isActive ? 'Yes' : 'No') },
+    { title: 'Category', dataIndex: 'CategoryName', key: 'CategoryName' },
+    { title: 'Product', dataIndex: 'ProductName', key: 'ProductName' },
+    { title: 'Size', dataIndex: 'SizeName', key: 'SizeName' },
+    { title: 'Price', dataIndex: 'Amount', key: 'Amount' },
+    {
+      title: 'Brand',
+      dataIndex: 'BrandName',
+      key: 'BrandName',
+    },
     {
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
-        <Space>
-          <Button icon={<EditOutlined />} onClick={() => showDrawer(record)} />
-          <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)} />
+        <Space >
+          <Button icon={<EditOutlined />} onClick={() => onEditProductDetail(record)} />
+          <Popconfirm title="Are you sure to delete this ProductDetails ?" onConfirm={() => handleDelete(record)}>
+            <Button icon={<DeleteOutlined />} />
+          </Popconfirm>
         </Space>
       ),
     },
@@ -130,45 +127,58 @@ const ProductDetails = () => {
 
   return (
     <div>
-      <h1>Product Details</h1>
-      <Form layout="inline" onFinish={handleSearch} form={form}>
-        <Form.Item name="category">
-          <Select placeholder="Category" style={{ width: 150 }}>
-            <Option value="Category1">Category1</Option>
-            <Option value="Category2">Category2</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="product">
-          <Select placeholder="Product" style={{ width: 150 }}>
-            <Option value="Product1">Product1</Option>
-            <Option value="Product2">Product2</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="size">
-          <Select placeholder="Size" style={{ width: 150 }}>
-            <Option value="Small">Small</Option>
-            <Option value="Medium">Medium</Option>
-            <Option value="Large">Large</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item>
-          <Button className='bg-[#4F46E5]' type="primary" htmlType="submit" icon={<SearchOutlined />}>
-            Search
-          </Button>
-        </Form.Item>
-        <Form.Item>
-          <Button onClick={handleReset}>
-            Reset
-          </Button>
-        </Form.Item>
+      <Form layout="vertical" onFinish={handleSearch} form={form}>
+        <Row gutter={16}>
+          <Col span={6}>
+            <Form.Item name="category" label="Category">
+              <Select placeholder="Category" style={{ width: '100%' }}>
+                <Option value="Category1">Category1</Option>
+                <Option value="Category2">Category2</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item name="product" label="Product">
+              <Select placeholder="Product" style={{ width: '100%' }}>
+                <Option value="Product1">Product1</Option>
+                <Option value="Product2">Product2</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item name="size" label="Size">
+              <Select placeholder="Size" style={{ width: '100%' }}>
+                <Option value="Small">Small</Option>
+                <Option value="Medium">Medium</Option>
+                <Option value="Large">Large</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col className='mt-[30px]'>
+            <Form.Item>
+              <Button className='bg-[#4F46E5]' type="primary" htmlType="submit" icon={<SearchOutlined />}>
+                Search
+              </Button>
+            </Form.Item>
+          </Col>
+          <Col className='mt-[30px]'>
+            <Form.Item>
+              <Button onClick={handleReset}>
+                Reset
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
-      <Button type="primary" icon={<PlusOutlined />} style={{ marginTop: 16 }} onClick={() => showDrawer()}>
-        Create New Product Details
-      </Button>
-      <Table columns={columns} dataSource={products} rowKey="id" style={{ marginTop: 16 }} />
+
+      <div className='flex justify-end'>
+        <RoundButton onClick={() => showDrawer()} />
+      </div>
+
+      <Table columns={columns} dataSource={filteredProducts} rowKey="id" style={{ marginTop: 16 }} />
 
       <Drawer
-        title={currentProduct ? 'Edit Product Details' : 'Create New Product Details'}
+        title={isEditing ? 'Edit Product Details' : 'Create New Product Details'}
         width={480}
         onClose={closeDrawer}
         visible={drawerVisible}
@@ -201,8 +211,8 @@ const ProductDetails = () => {
             <Checkbox>Active</Checkbox>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
+            <Button type="primary" htmlType="submit" className='w-full'>
+              {isEditing ? 'Updated' : 'Create'}
             </Button>
           </Form.Item>
         </Form>
